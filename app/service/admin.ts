@@ -1,7 +1,6 @@
 import { Service } from 'egg';
 import { v4 as uuid } from 'uuid';
-
-const ADMIN_PREFIX = 'admin-token:';
+import { ADMIN_PREFIX } from '../common/const/redis';
 
 export default class AdminService extends Service {
     public async login(username: string, password: string) {

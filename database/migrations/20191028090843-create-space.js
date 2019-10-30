@@ -1,11 +1,11 @@
 'use strict';
 
 module.exports = {
-    up: (queryInterface, Sequelize) => {
+    up: async (queryInterface, Sequelize) => {
         const { BIGINT, STRING, INTEGER, DATE } = Sequelize;
 
-        return queryInterface.createTable(
-            'namespaces',
+        await queryInterface.createTable(
+            'spaces',
             {
                 id: {
                     type: BIGINT,
@@ -46,9 +46,11 @@ module.exports = {
                 collate: 'utf8mb4_bin',
             },
         );
+
+        await queryInterface.addIndex('spaces', { fields: ['userId'] });
     },
 
     down: queryInterface => {
-        return queryInterface.dropTable('namespaces');
+        return queryInterface.dropTable('spaces');
     },
 };

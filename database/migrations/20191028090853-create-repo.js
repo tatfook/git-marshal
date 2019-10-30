@@ -1,10 +1,10 @@
 'use strict';
 
 module.exports = {
-    up: (queryInterface, Sequelize) => {
+    up: async (queryInterface, Sequelize) => {
         const { BIGINT, STRING, DATE } = Sequelize;
 
-        return queryInterface.createTable(
+        await queryInterface.createTable(
             'repos',
             {
                 id: {
@@ -18,7 +18,7 @@ module.exports = {
                     allowNull: false,
                 },
 
-                namespaceId: {
+                spaceId: {
                     type: BIGINT,
                     allowNull: false,
                 },
@@ -50,6 +50,10 @@ module.exports = {
                 collate: 'utf8mb4_bin',
             },
         );
+
+        await queryInterface.addIndex('repos', { fields: ['guardId'] });
+        await queryInterface.addIndex('repos', { fields: ['spaceId'] });
+        await queryInterface.addIndex('repos', { fields: ['path'], unique: true });
     },
 
     down: queryInterface => {

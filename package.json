@@ -50,6 +50,7 @@
         "tslib": "^1.9.0",
         "tslint": "^5.0.0",
         "tslint-config-egg": "^1.0.0",
+        "factory-girl": "^5.0.2",
         "typescript": "^3.0.0"
     },
     "engines": {

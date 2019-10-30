@@ -1,6 +1,7 @@
 import 'egg';
 
 declare module 'egg' {
-  export interface Application {
-  }
+    export interface Application {
+        factory: any;
+    }
 }

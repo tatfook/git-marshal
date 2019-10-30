@@ -2,7 +2,7 @@ import * as assert from 'assert';
 import { Context } from 'egg';
 import { app } from 'egg-mock/bootstrap';
 
-describe('test/app/service/admin.test.js', () => {
+describe('test/app/service/admin.test.ts', () => {
     let ctx: Context;
     let token: string;
 

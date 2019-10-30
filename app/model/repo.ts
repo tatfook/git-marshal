@@ -67,9 +67,11 @@ export default (app: Application) => {
 
     Model.addHook('afterCreate', (instance: IRepo) => {
         app.model.Namespace.increment('repoCount', {
+            by: 1,
             where: { id: instance.namespaceId },
         });
         app.model.Guard.increment('repoCount', {
+            by: 1,
             where: { id: instance.guardId },
         });
     });

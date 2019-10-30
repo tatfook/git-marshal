@@ -3,7 +3,7 @@ import { Application } from 'egg';
 
 const { BIGINT, INTEGER, STRING, DATE } = Sequelize;
 
-interface INamespace extends Sequelize.Model {
+interface ISpace extends Sequelize.Model {
     id?: number;
     name: string;
     userId: string;
@@ -12,7 +12,7 @@ interface INamespace extends Sequelize.Model {
     updatedAt?: Date;
 }
 
-type NamespaceInstance = typeof Sequelize.Model & (new (values?: object, options?: Sequelize.BuildOptions) => INamespace);
+type SpaceInstance = typeof Sequelize.Model & (new (values?: object, options?: Sequelize.BuildOptions) => ISpace);
 
 const schema = {
     id: {
@@ -57,7 +57,7 @@ const schemaOption = {
 };
 
 export default (app: Application) => {
-    const Model = app.model.define('namespaces', schema, schemaOption) as NamespaceInstance;
+    const Model = app.model.define('spaces', schema, schemaOption) as SpaceInstance;
 
     return Model;
 };

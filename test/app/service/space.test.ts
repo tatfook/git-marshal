@@ -15,7 +15,7 @@ describe('test/app/service/space.test.ts', () => {
         });
 
         it('#findByuserId', async () => {
-            const space = await ctx.service.space.findByUserId(spaceOne.id);
+            const space = await ctx.service.space.findByUserId(spaceOne.userId);
             assert(space.id === spaceOne.id);
         });
     });
@@ -31,24 +31,25 @@ describe('test/app/service/space.test.ts', () => {
         });
     });
 
-    describe('cache', () => {
+    describe('#cache', () => {
+        let space: any;
+        beforeEach(async () => {
+            space = await app.factory.create('space');
+        });
         it('return data if cached', async () => {
-            const space = await app.factory.create('space');
-            await ctx.service.space.cacheSpace(space);
-            const cachedspace = await ctx.service.space.getCachedSpace(space.userId);
+            await ctx.service.space.cacheSpaceByUserId(space);
+            const cachedspace = await ctx.service.space.getCachedSpaceByUserId(space.userId);
             assert(cachedspace.id === space.id);
         });
 
         it('return null if not cached', async () => {
-            const space = await app.factory.create('space');
-            const cachedSpace = await ctx.service.space.getCachedSpace(space.userId);
+            const cachedSpace = await ctx.service.space.getCachedSpaceByUserId(space.userId);
             assert(cachedSpace === undefined);
         });
 
         it('return data if reload cached', async () => {
-            const space = await app.factory.create('space');
             await ctx.service.space.reloadCache();
-            const cachedspace = await ctx.service.space.getCachedSpace(space.userId);
+            const cachedspace = await ctx.service.space.getCachedSpaceByUserId(space.userId);
             assert(cachedspace.id === space.id);
         });
     });

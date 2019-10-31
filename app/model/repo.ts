@@ -8,7 +8,7 @@ interface IRepo extends Sequelize.Model {
     name: string;
     path: string;
     guardId: number;
-    namespaceId: number;
+    spaceId: number;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -27,7 +27,7 @@ const schema = {
         allowNull: false,
     },
 
-    namespaceId: {
+    spaceId: {
         type: BIGINT,
         allowNull: false,
     },
@@ -65,23 +65,23 @@ const schemaOption = {
 export default (app: Application) => {
     const Model = app.model.define('repos', schema, schemaOption) as RepoInstance;
 
-    Model.addHook('afterCreate', (instance: IRepo) => {
-        app.model.Namespace.increment('repoCount', {
+    Model.addHook('afterCreate', async (instance: IRepo) => {
+        await app.model.Space.increment(['repoCount'], {
             by: 1,
-            where: { id: instance.namespaceId },
+            where: { id: instance.spaceId },
         });
-        app.model.Guard.increment('repoCount', {
+        await app.model.Guard.increment(['repoCount'], {
             by: 1,
             where: { id: instance.guardId },
         });
     });
 
-    Model.addHook('beforeDestroy', (instance: IRepo) => {
-        app.model.Namespace.increment('repoCount', {
+    Model.addHook('beforeDestroy', async (instance: IRepo) => {
+        await app.model.Space.increment(['repoCount'], {
             by: -1,
-            where: { id: instance.namespaceId },
+            where: { id: instance.spaceId },
         });
-        app.model.Guard.increment('repoCount', {
+        await app.model.Guard.increment(['repoCount'], {
             by: -1,
             where: { id: instance.guardId },
         });

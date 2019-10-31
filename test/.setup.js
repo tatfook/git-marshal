@@ -2,8 +2,12 @@
 
 const { app } = require('egg-mock/bootstrap');
 const factories = require('./factories');
+const Redis = require('ioredis-mock');
 
-before(() => factories(app));
+before(() => {
+    factories(app);
+    app.redis = new Redis();
+});
 
 afterEach(async () => {
     // clear database after each test case

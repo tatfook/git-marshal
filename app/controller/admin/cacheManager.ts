@@ -10,18 +10,11 @@ export default class AdminCacheManager extends Controller {
         await this.ensureAdmin();
         const { ctx } = this;
         await ctx.service.guard.reloadCache();
-        await ctx.service.space.reloadCache();
     }
 
     public async reloadGuardCache() {
         await this.ensureAdmin();
         const { ctx } = this;
         await ctx.service.guard.reloadCache();
-    }
-
-    public async reloadSpaceCache() {
-        await this.ensureAdmin();
-        const { ctx } = this;
-        await ctx.service.space.reloadCache();
     }
 }

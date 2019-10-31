@@ -24,19 +24,26 @@ describe('test/app/service/admin.test.ts', () => {
             ctx.headers.token = token;
         });
 
-        it('#refreshToken', async () => {
-            const result = await ctx.service.admin.refreshToken();
-            assert(token !== result.token);
+        it('#logout', async () => {
+            const result = await ctx.service.admin.logout();
+            assert(result === true);
+        });
+
+        it('#logout with invalid token', async () => {
+            ctx.headers.token = token + 'aaa';
+            const result = await ctx.service.admin.logout();
+            assert(result === true);
         });
     });
 
     describe('without token', () => {
-        it('#refreshToken', async () => {
+        it('#logout', async () => {
+            ctx.headers.token = '';
             try {
-                await ctx.service.admin.refreshToken();
-                assert.fail('except fail to refresh token!');
+                await ctx.service.admin.logout();
+                assert.fail('except fail to logout!');
             } catch (e) {
-                assert(e.message === 'invalid token');
+                assert(e.message === 'Missing user token');
             }
         });
     });

@@ -1,17 +1,8 @@
 import * as Sequelize from 'sequelize';
 import { Application } from 'egg';
+import { IRepo } from '../common/interface/model';
 
 const { BIGINT, STRING, DATE } = Sequelize;
-
-interface IRepo extends Sequelize.Model {
-    id?: number;
-    name: string;
-    path: string;
-    guardId: number;
-    spaceId: number;
-    createdAt?: Date;
-    updatedAt?: Date;
-}
 
 type RepoInstance = typeof Sequelize.Model & (new (values?: object, options?: Sequelize.BuildOptions) => IRepo);
 

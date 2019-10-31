@@ -28,6 +28,7 @@ module.exports = {
                     // repo counter
                     type: INTEGER,
                     allowNull: false,
+                    defaultValue: 0,
                 },
 
                 createdAt: {

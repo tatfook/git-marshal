@@ -19,5 +19,11 @@ export default () => {
         agent: true,
     };
 
+    config.mockAPI = {
+        guard: {
+            url: 'http://yapi.kp-para.cn/mock/39',
+        },
+    };
+
     return config;
 };

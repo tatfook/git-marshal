@@ -1,16 +1,8 @@
 import * as Sequelize from 'sequelize';
 import { Application } from 'egg';
+import { ISpace } from '../common/interface/model';
 
 const { BIGINT, INTEGER, STRING, DATE } = Sequelize;
-
-interface ISpace extends Sequelize.Model {
-    id?: number;
-    name: string;
-    userId: string;
-    repoCount: number;
-    createdAt?: Date;
-    updatedAt?: Date;
-}
 
 type SpaceInstance = typeof Sequelize.Model & (new (values?: object, options?: Sequelize.BuildOptions) => ISpace);
 
@@ -37,6 +29,7 @@ const schema = {
         // repo counter
         type: INTEGER,
         allowNull: false,
+        defaultValue: 0,
     },
 
     createdAt: {

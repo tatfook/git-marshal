@@ -1,16 +1,9 @@
 import * as bcrypt from 'bcryptjs';
 import * as Sequelize from 'sequelize';
 import { Application } from 'egg';
+import { IAdmin } from '../common/interface/model';
 
 const { BIGINT, STRING, DATE } = Sequelize;
-
-interface IAdmin extends Sequelize.Model {
-    id?: number;
-    username: string;
-    password?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
-}
 
 type AdminInstance = typeof Sequelize.Model & (new (values?: object, options?: Sequelize.BuildOptions) => IAdmin);
 

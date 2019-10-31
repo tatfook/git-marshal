@@ -13,7 +13,7 @@ export default class AdminService extends Service {
         return await this.applyToken(admin.id);
     }
 
-    private async applyToken(id) {
+    private async applyToken(id: number) {
         // prettier-ignore
         const token: string = uuid().split('-').join('');
         // tslint:disable-next-line:no-magic-numbers
@@ -26,34 +26,12 @@ export default class AdminService extends Service {
         return { token, expireAt };
     }
 
-    public async refreshToken() {
-        const { ctx } = this;
-        const admin = await ctx.service.admin.current();
-        return this.applyToken(admin.id);
-    }
-
     public async logout() {
         const { ctx } = this;
-        const token = ctx.headers.token;
+        const token: string = ctx.headers.token;
+        if (token === '') return ctx.throw(404, 'Missing user token');
         await ctx.app.redis.hdel(ADMIN_PREFIX + token);
         return true;
-    }
-
-    public async resetPassword(values) {
-        const { ctx } = this;
-        const admin = await ctx.service.admin.current();
-        const verifyPsw = await ctx.compare(values.oldPassword, admin.password);
-        if (!verifyPsw) {
-            ctx.throw(404, 'admin password error');
-        } else {
-            return admin.update(values, { individualHooks: true });
-        }
-    }
-
-    public async resetUserInfo(values) {
-        const { ctx } = this;
-        const admin = await ctx.service.admin.current();
-        admin.update(values, { individualHooks: true });
     }
 
     public async current() {

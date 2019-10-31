@@ -1,16 +1,8 @@
 import * as Sequelize from 'sequelize';
 import { Application } from 'egg';
+import { IGuard } from '../common/interface/model';
 
 const { BIGINT, INTEGER, STRING, DATE } = Sequelize;
-
-interface IGuard extends Sequelize.Model {
-    id?: number;
-    name: string;
-    url: string;
-    repoCount: number;
-    createdAt?: Date;
-    updatedAt?: Date;
-}
 
 type GuardInstance = typeof Sequelize.Model & (new (values?: object, options?: Sequelize.BuildOptions) => IGuard);
 
@@ -38,6 +30,7 @@ const schema = {
         // repo counter
         type: INTEGER,
         allowNull: false,
+        defaultValue: 0,
     },
 
     createdAt: {

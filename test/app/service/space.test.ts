@@ -39,18 +39,12 @@ describe('test/app/service/space.test.ts', () => {
         it('return data if cached', async () => {
             await ctx.service.space.cacheSpaceByUserId(space);
             const cachedspace = await ctx.service.space.getCachedSpaceByUserId(space.userId);
-            assert(cachedspace.id === space.id);
+            assert(cachedspace && cachedspace.id === space.id);
         });
 
         it('return null if not cached', async () => {
             const cachedSpace = await ctx.service.space.getCachedSpaceByUserId(space.userId);
-            assert(cachedSpace === undefined);
-        });
-
-        it('return data if reload cached', async () => {
-            await ctx.service.space.reloadCache();
-            const cachedspace = await ctx.service.space.getCachedSpaceByUserId(space.userId);
-            assert(cachedspace.id === space.id);
+            assert(cachedSpace === null);
         });
     });
 });

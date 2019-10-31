@@ -57,51 +57,39 @@ describe('test/app/service/repo.test.ts', () => {
         });
     });
 
-    describe('#getRepoByFilePath', () => {
+    describe('#getRepoByFullPath', () => {
         let repo: any;
         beforeEach(async () => {
             repo = await app.factory.create('repo');
         });
 
-        describe('should return repo with valid repo file path', () => {
+        describe('should return repo with valid path', () => {
             it('spaceName/repoName/fileName', async () => {
-                const resRepo = await ctx.service.repo.getRepoByFilePath(repo.path + '/abc.jpg');
+                const resRepo = await ctx.service.repo.getRepoByFullPath(repo.path + '/abc.jpg');
                 assert(resRepo.id === repo.id);
             });
             it('/spaceName/repoName/fileName', async () => {
-                const resRepo = await ctx.service.repo.getRepoByFilePath('/' + repo.path + '/abc.jpg');
+                const resRepo = await ctx.service.repo.getRepoByFullPath('/' + repo.path + '/abc.jpg');
+                assert(resRepo.id === repo.id);
+            });
+            it('spaceName/repoName', async () => {
+                const resRepo = await ctx.service.repo.getRepoByFullPath(repo.path);
+                assert(resRepo.id === repo.id);
+            });
+            it('/spaceName/repoName', async () => {
+                const resRepo = await ctx.service.repo.getRepoByFullPath('/' + repo.path);
+                assert(resRepo.id === repo.id);
+            });
+            it('spaceName/repoName/', async () => {
+                const resRepo = await ctx.service.repo.getRepoByFullPath(repo.path + '/');
                 assert(resRepo.id === repo.id);
             });
         });
 
         describe('should failed to return repo if filepath is invalid', () => {
-            it('spaceName/repoName', async () => {
-                try {
-                    await ctx.service.repo.getRepoByFilePath(repo.path);
-                    assert.fail('except fail to get repo!');
-                } catch (e) {
-                    assert(e.message === 'invalid file path');
-                }
-            });
-            it('/spaceName/repoName', async () => {
-                try {
-                    await ctx.service.repo.getRepoByFilePath('/' + repo.path);
-                    assert.fail('except fail to get repo!');
-                } catch (e) {
-                    assert(e.message === 'invalid file path');
-                }
-            });
-            it('spaceName/repoName/', async () => {
-                try {
-                    await ctx.service.repo.getRepoByFilePath(repo.path);
-                    assert.fail('except fail to get repo!');
-                } catch (e) {
-                    assert(e.message === 'invalid file path');
-                }
-            });
             it('filename', async () => {
                 try {
-                    await ctx.service.repo.getRepoByFilePath('abc.jpg');
+                    await ctx.service.repo.getRepoByFullPath('abc.jpg');
                     assert.fail('except fail to get repo!');
                 } catch (e) {
                     assert(e.message === 'invalid file path');
@@ -109,28 +97,28 @@ describe('test/app/service/repo.test.ts', () => {
             });
             it('with invalid repo path', async () => {
                 try {
-                    await ctx.service.repo.getRepoByFilePath(repo.path + 'aaa/bb.md');
+                    await ctx.service.repo.getRepoByFullPath(repo.path + 'aaa/bb.md');
                     assert.fail('except fail to get repo!');
                 } catch (e) {
                     assert(e.message === 'repo not found');
                 }
             });
         });
+    });
 
-        describe('#cache', () => {
-            let repo: any;
-            beforeEach(async () => {
-                repo = await app.factory.create('repo');
-            });
-            it('return data if cached', async () => {
-                await ctx.service.repo.cacheRepoByPath(repo);
-                const cachedRepo = await ctx.service.repo.getCachedRepoByPath(repo.path);
-                assert(cachedRepo.id === repo.id);
-            });
-            it('return null if not cached', async () => {
-                const cachedRepo = await ctx.service.repo.getCachedRepoByPath(repo.path);
-                assert(cachedRepo === undefined);
-            });
+    describe('#cache', () => {
+        let repo: any;
+        beforeEach(async () => {
+            repo = await app.factory.create('repo');
+        });
+        it('return data if cached', async () => {
+            await ctx.service.repo.cacheRepoByPath(repo);
+            const cachedRepo = await ctx.service.repo.getCachedRepoByPath(repo.path);
+            assert(cachedRepo && cachedRepo.id === repo.id);
+        });
+        it('return null if not cached', async () => {
+            const cachedRepo = await ctx.service.repo.getCachedRepoByPath(repo.path);
+            assert(cachedRepo === null);
         });
     });
 });

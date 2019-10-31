@@ -56,17 +56,18 @@ describe('test/app/service/guard.test.ts', () => {
         it('return data if cached', async () => {
             await ctx.service.guard.cacheGuard(guard);
             const cachedGuard = await ctx.service.guard.getCachedGuard(guard.id);
-            assert(cachedGuard.id === guard.id);
+            assert(cachedGuard && cachedGuard.id === guard.id);
         });
 
         it('return null if not cached', async () => {
             const cachedGuard = await ctx.service.guard.getCachedGuard(guard.id);
-            assert(cachedGuard === undefined);
+            assert(cachedGuard === null);
         });
+
         it('return data if reload cached', async () => {
             await ctx.service.guard.reloadCache();
             const cachedGuard = await ctx.service.guard.getCachedGuard(guard.id);
-            assert(cachedGuard.id === guard.id);
+            assert(cachedGuard && cachedGuard.id === guard.id);
         });
     });
 });

@@ -1,9 +1,10 @@
 import { Service } from 'egg';
 import { GUARD_PREFIX } from '../common/const/redis';
+import { IGuard } from '../common/interface/model';
 
 export default class GuardService extends Service {
     public async findById(id: number) {
-        let guard = await this.getCachedGuard(id);
+        let guard: any = await this.getCachedGuard(id);
         if (!guard) {
             guard = await this.ctx.model.Guard.findOne({ where: { id } });
             if (!guard) return this.ctx.throw('invalid id');
@@ -21,19 +22,24 @@ export default class GuardService extends Service {
         return guard;
     }
 
-    public async cacheGuard(guard) {
+    public async cacheGuard(guard: IGuard) {
         return this.app.redis.set(GUARD_PREFIX + guard.id, JSON.stringify(guard));
     }
 
     public async getCachedGuard(id: number) {
         const jsonStr = await this.app.redis.get(GUARD_PREFIX + id);
-        if (jsonStr) return JSON.parse(jsonStr);
+        if (jsonStr) {
+            const jsonData = JSON.parse(jsonStr);
+            return this.ctx.model.Guard.build(jsonData);
+        }
+        return null;
     }
 
     public async reloadCache() {
         const guards = await this.ctx.model.Guard.findAll();
-        guards.forEach(guard => {
-            this.cacheGuard(guard);
+        const promises = guards.map(async guard => {
+            await this.cacheGuard(guard);
         });
+        return Promise.all(promises);
     }
 }

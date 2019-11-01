@@ -23,5 +23,13 @@ describe('test/app/model/guard.test.ts', () => {
             const cachedGuard = await app.model.Guard.getCachedGuard(guard.id);
             assert(cachedGuard && cachedGuard.id === guard.id);
         });
+
+        it('will remove the deleted guard from cache after reload', async () => {
+            await app.model.Guard.cacheGuard(guard);
+            await guard.destroy();
+            await app.model.Guard.reloadCache();
+            const cachedGuard = await app.model.Guard.getCachedGuard(guard.id);
+            assert(cachedGuard === null);
+        });
     });
 });

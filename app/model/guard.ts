@@ -73,11 +73,19 @@ export default (app: Application) => {
     };
 
     Model.reloadCache = async () => {
-        const guards = await app.model.Guard.findAll();
-        const promises = guards.map(async guard => {
-            await app.model.Guard.cacheGuard(guard);
+        // clean the cache data first, makesure there's no deleted guard
+        const guardKeys = await app.redis.keys(GUARD_PREFIX + '*');
+        const pipeline = app.redis.pipeline();
+        guardKeys.forEach(key => {
+            pipeline.del(key);
         });
-        return Promise.all(promises);
+
+        // load all available guards
+        const guards = await app.model.Guard.findAll();
+        guards.forEach(guard => {
+            pipeline.set(GUARD_PREFIX + guard.id, JSON.stringify(guard));
+        });
+        await pipeline.exec();
     };
 
     return Model;

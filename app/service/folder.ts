@@ -1,58 +1,48 @@
 import { Service } from 'egg';
 import * as _ from 'lodash';
 import { KEEP } from '../common/const/git';
+import { ICommitFile, ECommitAction } from '../../typings/custom/api';
 
 export default class FolderService extends Service {
-    public async createFolder(folderPath: string) {
+    public async createFolder(folderFullPath: string) {
         const { ctx } = this;
-        const filePath = _.trim(folderPath, ' /') + '/' + KEEP;
+        const filePath = _.trim(folderFullPath, ' /') + '/' + KEEP;
         return ctx.service.file.upsertFile(filePath, '');
     }
 
-    public async getFiles(folderPath: string, recursive: boolean = false) {
+    public async getFiles(folderFullPath: string, recursive: boolean = false) {
         const { ctx } = this;
-        folderPath = _.trim(folderPath, ' /');
-        const repo = await ctx.service.repo.getRepoByFullPath(folderPath);
-        const guard = await ctx.service.guard.findById(repo.guardId);
-        const folderName = folderPath.slice(repo.path.length + 1);
-        const result = await this.ctx.curl(`${guard.url}/file/raw`, {
-            data: {
-                repopath: repo.path,
-                filepath: folderName,
-                recursive,
-            },
-        });
-        return result.data;
+        const { repo, guard, folderPath } = await this.getDataFromFolderPath(folderFullPath);
+        return ctx.app.api.guard.getFilesUnderFolder(guard.url, repo.path, folderPath, recursive);
     }
 
     // public async moveFolder(folderPath: string, newFoldPath: string) {
     //      // move all files from one to the other folder
     // }
 
-    public async deleteFolder(folderPath: string) {
+    public async deleteFolder(folderFullPath: string) {
         // delete all files
         const { ctx } = this;
-        const repo = await ctx.service.repo.getRepoByFullPath(folderPath);
-        const guard = await ctx.service.guard.findById(repo.guardId);
-
-        const folderFiles = await this.getFiles(folderPath, true);
-        const files = folderFiles
+        const { repo, guard, folderPath } = await this.getDataFromFolderPath(folderFullPath);
+        const folderFiles = await ctx.app.api.guard.getFilesUnderFolder(guard.url, repo.path, folderPath, true);
+        const files: ICommitFile[] = folderFiles
             .filter(file => file.isBlob)
             .map(file => {
                 return {
-                    action: 'delete',
+                    action: ECommitAction.REMOVE,
                     path: file.path,
                     id: file.id,
-                };
+                } as ICommitFile;
             });
+        return ctx.app.api.guard.commitFiles(guard.url, repo.path, files);
+    }
 
-        const result = await this.ctx.curl(`${guard.url}/file/commit`, {
-            method: 'POST',
-            data: {
-                repopath: repo.path,
-                files,
-            },
-        });
-        return result.data;
+    private async getDataFromFolderPath(folderFullPath: string) {
+        const { ctx } = this;
+        folderFullPath = _.trim(folderFullPath, ' /');
+        const repo = await ctx.service.repo.getRepoByFullPath(folderFullPath);
+        const guard = await ctx.service.guard.findById(repo.guardId);
+        const folderPath = folderFullPath.slice(repo.path.length + 1);
+        return { repo, guard, folderPath };
     }
 }

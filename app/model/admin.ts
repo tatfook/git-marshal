@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcryptjs';
 import * as Sequelize from 'sequelize';
 import { Application } from 'egg';
-import { IAdmin } from '../common/interface/model';
+import { IAdmin } from '../../typings/custom/model';
 
 const { BIGINT, STRING, DATE } = Sequelize;
 

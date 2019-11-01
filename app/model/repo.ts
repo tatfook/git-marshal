@@ -1,10 +1,15 @@
 import * as Sequelize from 'sequelize';
 import { Application } from 'egg';
-import { IRepo } from '../common/interface/model';
+import { IRepo } from '../../typings/custom/model';
+import { REPO_PREFIX } from '../common/const/redis';
 
 const { BIGINT, STRING, DATE } = Sequelize;
 
-type RepoInstance = typeof Sequelize.Model & (new (values?: object, options?: Sequelize.BuildOptions) => IRepo);
+type RepoInstance = typeof Sequelize.Model & {
+    new (values?: object, options?: Sequelize.BuildOptions): IRepo;
+    cacheRepoByPath(repo: IRepo): Promise<any>;
+    getCachedRepoByPath(repoPath: string): Promise<IRepo | null>;
+};
 
 const schema = {
     id: {
@@ -77,6 +82,20 @@ export default (app: Application) => {
             where: { id: instance.guardId },
         });
     });
+
+    Model.cacheRepoByPath = async (repo: IRepo) => {
+        // cache for 24 hours
+        return app.redis.set(REPO_PREFIX + repo.path, JSON.stringify(repo), 'EX', 3600 * 24); // tslint:disable-line
+    };
+
+    Model.getCachedRepoByPath = async (repoPath: string) => {
+        const jsonStr = await app.redis.get(REPO_PREFIX + repoPath);
+        if (jsonStr) {
+            const jsonData = JSON.parse(jsonStr);
+            return app.model.Repo.build(jsonData);
+        }
+        return null;
+    };
 
     return Model;
 };

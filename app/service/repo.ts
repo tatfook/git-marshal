@@ -1,7 +1,6 @@
 import { Service } from 'egg';
 import * as _ from 'lodash';
-import { REPO_PREFIX } from '../common/const/redis';
-import { IRepo, ISpace } from '../common/interface/model';
+import { ISpace } from '../../typings/custom/model';
 
 export default class RepoService extends Service {
     public async createRepo(userId: number, repoName: string) {
@@ -15,7 +14,7 @@ export default class RepoService extends Service {
             path: this.buildRepoPath(space, repoName),
         });
         if (!repo) ctx.throw('Failed to create repo');
-        this.cacheRepoByPath(repo);
+        ctx.model.Repo.cacheRepoByPath(repo);
         return repo;
     }
 
@@ -23,13 +22,7 @@ export default class RepoService extends Service {
         const { ctx } = this;
         const repo = await this.getRepoByPath(repoPath);
         const guard = await ctx.service.guard.findById(repo.guardId);
-        const result = await this.ctx.curl(`${guard.url}/file/archive`, {
-            data: {
-                repopath: repo.path,
-                ref,
-            },
-        });
-        return result.data;
+        return this.app.api.guard.downloadRepo(guard.url, repo.path, ref);
     }
 
     private buildRepoPath(space: ISpace, repoName: string) {
@@ -38,38 +31,26 @@ export default class RepoService extends Service {
 
     // filePath: /a/b/c or a/b/c
     // return: a/b
-    public getRepoPath(filePath: string) {
+    private getRepoPath(filePath: string) {
         const arr = _.trim(filePath, ' /').split('/');
         if (arr.length > 1) return arr[0] + '/' + arr[1];
     }
 
     public async getRepoByFullPath(fullPath: string) {
+        const { ctx } = this;
         const repoPath = this.getRepoPath(fullPath);
-        if (!repoPath) return this.ctx.throw('invalid file path');
+        if (!repoPath) return ctx.throw('invalid file path');
         return await this.getRepoByPath(repoPath);
     }
 
     public async getRepoByPath(repoPath: string) {
-        let repo = await this.getCachedRepoByPath(repoPath);
+        const { ctx } = this;
+        let repo = await ctx.model.Repo.getCachedRepoByPath(repoPath);
         if (!repo) {
-            repo = await this.ctx.model.Repo.findOne({ where: { path: repoPath } });
-            if (!repo) return this.ctx.throw('repo not found');
-            this.cacheRepoByPath(repo);
+            repo = await ctx.model.Repo.findOne({ where: { path: repoPath } });
+            if (!repo) return ctx.throw('repo not found');
+            ctx.model.Repo.cacheRepoByPath(repo);
         }
         return repo;
-    }
-
-    public async cacheRepoByPath(repo: IRepo) {
-        // cache for 24 hours
-        return this.app.redis.set(REPO_PREFIX + repo.path, JSON.stringify(repo), 'EX', 3600 * 24); // tslint:disable-line
-    }
-
-    public async getCachedRepoByPath(repoPath: string) {
-        const jsonStr = await this.app.redis.get(REPO_PREFIX + repoPath);
-        if (jsonStr) {
-            const jsonData = JSON.parse(jsonStr);
-            return this.ctx.model.Repo.build(jsonData);
-        }
-        return null;
     }
 }

@@ -105,20 +105,4 @@ describe('test/app/service/repo.test.ts', () => {
             });
         });
     });
-
-    describe('#cache', () => {
-        let repo: any;
-        beforeEach(async () => {
-            repo = await app.factory.create('repo');
-        });
-        it('return data if cached', async () => {
-            await ctx.service.repo.cacheRepoByPath(repo);
-            const cachedRepo = await ctx.service.repo.getCachedRepoByPath(repo.path);
-            assert(cachedRepo && cachedRepo.id === repo.id);
-        });
-        it('return null if not cached', async () => {
-            const cachedRepo = await ctx.service.repo.getCachedRepoByPath(repo.path);
-            assert(cachedRepo === null);
-        });
-    });
 });

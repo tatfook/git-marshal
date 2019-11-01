@@ -7,7 +7,6 @@ import ExportFolder from '../../../app/controller/folder';
 import ExportHome from '../../../app/controller/home';
 import ExportRepo from '../../../app/controller/repo';
 import ExportSpace from '../../../app/controller/space';
-import ExportAdminCacheManager from '../../../app/controller/admin/cacheManager';
 import ExportAdminResource from '../../../app/controller/admin/resource';
 import ExportAdminSession from '../../../app/controller/admin/session';
 
@@ -19,7 +18,6 @@ declare module 'egg' {
     repo: ExportRepo;
     space: ExportSpace;
     admin: {
-      cacheManager: ExportAdminCacheManager;
       resource: ExportAdminResource;
       session: ExportAdminSession;
     }

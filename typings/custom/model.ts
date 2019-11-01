@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize';
 
 export interface IAdmin extends Sequelize.Model {
-    id: number;
+    readonly id: number;
     username: string;
     password?: string;
     createdAt?: Date;
@@ -9,7 +9,7 @@ export interface IAdmin extends Sequelize.Model {
 }
 
 export interface IGuard extends Sequelize.Model {
-    id: number;
+    readonly id: number;
     name: string;
     url: string;
     repoCount: number;
@@ -18,7 +18,7 @@ export interface IGuard extends Sequelize.Model {
 }
 
 export interface IRepo extends Sequelize.Model {
-    id: number;
+    readonly id: number;
     name: string;
     path: string;
     guardId: number;
@@ -28,7 +28,7 @@ export interface IRepo extends Sequelize.Model {
 }
 
 export interface ISpace extends Sequelize.Model {
-    id: number;
+    readonly id: number;
     name: string;
     userId: string;
     repoCount: number;

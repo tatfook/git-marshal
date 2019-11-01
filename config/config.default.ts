@@ -23,6 +23,12 @@ export default (appInfo: EggAppInfo) => {
         },
     };
 
+    config.httpclient = {
+        request: {
+            timeout: 3000,
+        },
+    };
+
     config.bcrypt = {
         saltRounds: 10, // default 10
     };

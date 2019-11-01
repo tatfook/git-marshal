@@ -7,13 +7,13 @@ export default class FileController extends Controller {
     }
 
     public async history() {
-        const { path, commitId, maxCount } = this.ctx.params;
-        this.ctx.body = await this.ctx.service.file.getHistory(path, commitId, maxCount);
+        const { path, commitId } = this.ctx.params;
+        this.ctx.body = await this.ctx.service.file.getFileHistory(path, commitId);
     }
 
     public async raw() {
         const { path, commitId } = this.ctx.params;
-        this.ctx.body = await this.ctx.service.file.getRawData(path, commitId);
+        this.ctx.body = await this.ctx.service.file.getFileRawData(path, commitId);
     }
 
     public async destroy() {

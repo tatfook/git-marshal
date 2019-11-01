@@ -30,21 +30,4 @@ describe('test/app/service/space.test.ts', () => {
             }
         });
     });
-
-    describe('#cache', () => {
-        let space: any;
-        beforeEach(async () => {
-            space = await app.factory.create('space');
-        });
-        it('return data if cached', async () => {
-            await ctx.service.space.cacheSpaceByUserId(space);
-            const cachedspace = await ctx.service.space.getCachedSpaceByUserId(space.userId);
-            assert(cachedspace && cachedspace.id === space.id);
-        });
-
-        it('return null if not cached', async () => {
-            const cachedSpace = await ctx.service.space.getCachedSpaceByUserId(space.userId);
-            assert(cachedSpace === null);
-        });
-    });
 });

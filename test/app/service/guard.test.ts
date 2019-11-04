@@ -12,8 +12,8 @@ describe('test/app/service/guard.test.ts', () => {
         let guardOne: any;
         let guardTwo: any;
         beforeEach(async () => {
-            guardOne = await app.factory.create('guard');
-            guardTwo = await app.factory.create('guard');
+            guardOne = await app.factory.create('guard', { repoCount: 2 });
+            guardTwo = await app.factory.create('guard', { repoCount: 1 });
         });
 
         it('#findById', async () => {
@@ -25,6 +25,12 @@ describe('test/app/service/guard.test.ts', () => {
             const guard = await ctx.service.guard.getRandomGuard();
             assert(guard);
             assert(guard.id === guardOne.id || guard.id === guardTwo.id);
+        });
+
+        it('#getGuardWithLessRepos', async () => {
+            const guard = await ctx.service.guard.getGuardWithLessRepos();
+            assert(guard);
+            assert(guard.id === guardTwo.id);
         });
     });
 
@@ -43,7 +49,16 @@ describe('test/app/service/guard.test.ts', () => {
                 await ctx.service.guard.getRandomGuard();
                 assert.fail('except fail to get random guard!');
             } catch (e) {
-                assert(e.message === 'no guard service available');
+                assert(e.message === '!!!operation error!!!');
+            }
+        });
+
+        it('#getGuardWithLessRepos', async () => {
+            try {
+                await ctx.service.guard.getGuardWithLessRepos();
+                assert.fail('except fail to get guard!');
+            } catch (e) {
+                assert(e.message === '!!!operation error!!!');
             }
         });
     });

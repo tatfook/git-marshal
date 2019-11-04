@@ -6,7 +6,7 @@ export default class RepoService extends Service {
     public async createRepo(userId: number, repoName: string) {
         const { ctx } = this;
         const space = await ctx.service.space.findByUserId(userId);
-        const guard = await ctx.service.guard.getRandomGuard();
+        const guard = await ctx.service.guard.getGuardWithLessRepos();
         const repo = await ctx.model.Repo.create({
             guardId: guard.id,
             spaceId: space.id,

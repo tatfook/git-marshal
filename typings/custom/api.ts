@@ -25,7 +25,6 @@ export interface IGitObject {
     id: string;
     name: string;
     path: string;
-    filemode: number;
     isTree: boolean;
     isBlob: boolean;
     children?: IGitObject[];

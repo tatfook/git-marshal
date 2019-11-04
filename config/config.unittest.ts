@@ -21,7 +21,7 @@ export default () => {
 
     config.mockAPI = {
         guard: {
-            url: 'http://yapi.kp-para.cn/mock/39',
+            url: 'http://10.28.18.44:3001/mock/39',
         },
     };
 

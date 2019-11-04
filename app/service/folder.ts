@@ -21,6 +21,7 @@ export default class FolderService extends Service {
     public async moveFolder(folderFullPath: string, newFoldFullPath: string, committer?: ICommitter) {
         // move all files and sub holders from one to the other folder
         const { ctx } = this;
+        if (folderFullPath === newFoldFullPath) return ctx.throw('should not move to the same folder');
         const { repo, guard, folderPath } = await this.getDataFromFolderPath(folderFullPath);
         const folderFiles = await ctx.app.api.guard.getFilesUnderFolder(guard.url, repo.path, folderPath, true);
         if (_.startsWith(newFoldFullPath, repo.path)) {
@@ -29,7 +30,7 @@ export default class FolderService extends Service {
             const files: ICommitFile[] = this.genMovingFilesCommands(folderFiles, folderPath, newFolderPath);
             return ctx.app.api.guard.commitFiles(guard.url, repo.path, files, committer);
         } else {
-            return ctx.throw('Only support moving folders in the same repo');
+            return ctx.throw('only support moving folders in the same repo');
         }
     }
 
@@ -51,7 +52,8 @@ export default class FolderService extends Service {
         return { repo, guard, folderPath };
     }
 
-    private genMovingFilesCommands(folderFiles: IGitObject[], folderPath: string, newFolderPath: string): ICommitFile[] {
+    public genMovingFilesCommands(folderFiles: IGitObject[], folderPath: string, newFolderPath: string): ICommitFile[] {
+        if (folderPath === newFolderPath) return [];
         const files = folderFiles.map((file): ICommitFile[] => {
             if (file.isTree) {
                 return this.genMovingFilesCommands(file.children || [], folderPath, newFolderPath); // handling sub folder
@@ -73,7 +75,7 @@ export default class FolderService extends Service {
         return _.flatten(files);
     }
 
-    private genDeletingFilesCommands(folderFiles: any[]): ICommitFile[] {
+    public genDeletingFilesCommands(folderFiles: any[]): ICommitFile[] {
         const files = folderFiles.map((file): ICommitFile | ICommitFile[] => {
             if (file.isTree) {
                 return this.genDeletingFilesCommands(file.children); // handling sub folder

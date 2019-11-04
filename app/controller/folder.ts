@@ -2,8 +2,8 @@ import { Controller } from 'egg';
 
 export default class FolderController extends Controller {
     public async create() {
-        const { path } = this.ctx.params;
-        this.ctx.body = await this.ctx.service.folder.createFolder(path);
+        const { path, committer } = this.ctx.params;
+        this.ctx.body = await this.ctx.service.folder.createFolder(path, { name: committer });
     }
 
     public async files() {
@@ -12,7 +12,12 @@ export default class FolderController extends Controller {
     }
 
     public async destroy() {
-        const { path } = this.ctx.params;
-        this.ctx.body = await this.ctx.service.folder.deleteFolder(path);
+        const { path, committer } = this.ctx.params;
+        this.ctx.body = await this.ctx.service.folder.deleteFolder(path, { name: committer });
+    }
+
+    public async move() {
+        const { path, newPath, committer } = this.ctx.params;
+        this.ctx.body = await this.ctx.service.folder.moveFolder(path, newPath, { name: committer });
     }
 }

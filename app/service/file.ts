@@ -9,9 +9,9 @@ export default class FileService extends Service {
         return this.app.api.guard.upsertFile(guard.url, repo.path, filePath, content, committer);
     }
 
-    public async deleteFile(fileFullPath: string) {
+    public async deleteFile(fileFullPath: string, committer?: ICommitter) {
         const { repo, guard, filePath } = await this.getDataFromFilePath(fileFullPath);
-        return this.app.api.guard.deleteFile(guard.url, repo.path, filePath);
+        return this.app.api.guard.deleteFile(guard.url, repo.path, filePath, committer);
     }
 
     // Waring: make sure the file path is full, eg: space/repo/file.txt
@@ -20,6 +20,7 @@ export default class FileService extends Service {
         const { repo, guard, filePath } = await this.getDataFromFilePath(fileFullPath);
         if (_.startsWith(newFileFullPath, repo.path)) {
             const newFilePath = newFileFullPath.slice(repo.path.length + 1);
+            if (!newFilePath) this.ctx.throw('invalid new file path');
             const file = await this.app.api.guard.getFileInfo(guard.url, repo.path, filePath);
             const files: ICommitFile[] = [
                 {
@@ -35,7 +36,7 @@ export default class FileService extends Service {
             ];
             return ctx.app.api.guard.commitFiles(guard.url, repo.path, files, committer);
         } else {
-            return ctx.throw('Only support moving files in the same repo');
+            return ctx.throw('only support moving files in the same repo');
         }
     }
 
@@ -60,6 +61,7 @@ export default class FileService extends Service {
         const repo = await ctx.service.repo.getRepoByFullPath(fileFullPath);
         const guard = await ctx.service.guard.findById(repo.guardId);
         const filePath = fileFullPath.slice(repo.path.length + 1);
+        if (!filePath) this.ctx.throw('invalid file path');
 
         return { repo, guard, filePath };
     }

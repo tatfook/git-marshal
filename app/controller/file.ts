@@ -16,8 +16,15 @@ export default class FileController extends Controller {
         this.ctx.body = await this.ctx.service.file.getFileRawData(path, commitId);
     }
 
+    public async show() {
+        const { path, commitId } = this.ctx.params;
+        this.ctx.body = await this.ctx.service.file.getFileInfo(path, commitId);
+    }
+
     public async destroy() {
         const { path } = this.ctx.params;
         this.ctx.body = await this.ctx.service.file.deleteFile(path);
     }
+
+    public async move() {}
 }

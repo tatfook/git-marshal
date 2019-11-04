@@ -18,9 +18,9 @@
         "tsc": "ets && tsc -p tsconfig.json",
         "ci": "npm run lint && npm run cov && npm run tsc",
         "autod": "autod",
-        "lint": "tslint --project . -c tslint.json",
+        "lint": "tslint --project .",
         "prettier": "prettier --write --config .prettierrc app/*/*.ts",
-        "fix": "tslint --project . -c tslint.json --fix",
+        "fix": "tslint --project . --fix",
         "clean": "ets clean"
     },
     "dependencies": {

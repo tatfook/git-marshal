@@ -1,8 +1,8 @@
 import { Application } from 'egg';
-import { IGuardAPI, ICommitFile } from '../../../typings/custom/api';
+import { IGuardAPI, ICommitFile, IFileInfo, IGitObject, IHistoryInfo, ICommitter } from '../../../typings/custom/api';
 
-const buildGuardAPI = (app: Application) => {
-    const getFileInfo = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string) => {
+const buildGuardAPI = (app: Application): IGuardAPI => {
+    const getFileInfo = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IFileInfo> => {
         const result = await app.curl(`${baseUrl}/file`, {
             data: {
                 repopath: repoPath,
@@ -13,7 +13,7 @@ const buildGuardAPI = (app: Application) => {
         return result.data;
     };
 
-    const getFileRawData = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string) => {
+    const getFileRawData = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<string> => {
         const result = await app.curl(`${baseUrl}/file/raw`, {
             data: {
                 repopath: repoPath,
@@ -24,7 +24,7 @@ const buildGuardAPI = (app: Application) => {
         return result.data;
     };
 
-    const upsertFile = async (baseUrl: string, repoPath: string, filePath: string, content: string) => {
+    const upsertFile = async (baseUrl: string, repoPath: string, filePath: string, content: string, committer?: ICommitter): Promise<string> => {
         const result = await app.curl(`${baseUrl}/file`, {
             method: 'POST',
             data: {
@@ -32,23 +32,25 @@ const buildGuardAPI = (app: Application) => {
                 filepath: filePath,
                 encoding: 'utf8',
                 content,
+                committer,
             },
         });
         return result.data;
     };
 
-    const deleteFile = async (baseUrl: string, repoPath: string, filePath: string) => {
+    const deleteFile = async (baseUrl: string, repoPath: string, filePath: string, committer?: ICommitter): Promise<boolean> => {
         const result = await app.curl(`${baseUrl}/file`, {
             method: 'DELETE',
             data: {
                 repopath: repoPath,
                 filepath: filePath,
+                committer,
             },
         });
         return result.data;
     };
 
-    const getFileHistory = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string) => {
+    const getFileHistory = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IHistoryInfo[]> => {
         const result = await app.curl(`${baseUrl}/file/history`, {
             data: {
                 repopath: repoPath,
@@ -59,7 +61,7 @@ const buildGuardAPI = (app: Application) => {
         return result.data;
     };
 
-    const downloadRepo = async (baseUrl: string, repoPath: string, ref?: string) => {
+    const downloadRepo = async (baseUrl: string, repoPath: string, ref?: string): Promise<string> => {
         const result = await app.curl(`${baseUrl}/file/archive`, {
             data: {
                 repopath: repoPath,
@@ -69,18 +71,19 @@ const buildGuardAPI = (app: Application) => {
         return result.data;
     };
 
-    const commitFiles = async (baseUrl: string, repoPath: string, files: ICommitFile[]) => {
+    const commitFiles = async (baseUrl: string, repoPath: string, files: ICommitFile[], committer?: ICommitter) => {
         const result = await app.curl(`${baseUrl}/file/commit`, {
             method: 'POST',
             data: {
                 repopath: repoPath,
                 files,
+                committer,
             },
         });
         return result.data;
     };
 
-    const getFilesUnderFolder = async (baseUrl: string, repoPath: string, folderPath: string, recursive: boolean = false) => {
+    const getFilesUnderFolder = async (baseUrl: string, repoPath: string, folderPath: string, recursive: boolean = false): Promise<IGitObject[]> => {
         const result = await app.curl(`${baseUrl}/file/tree`, {
             data: {
                 repopath: repoPath,
@@ -100,7 +103,7 @@ const buildGuardAPI = (app: Application) => {
         downloadRepo,
         commitFiles,
         getFilesUnderFolder,
-    } as IGuardAPI;
+    };
 };
 
 export default buildGuardAPI;

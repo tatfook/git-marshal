@@ -6,18 +6,46 @@ export enum ECommitAction {
 export interface ICommitFile {
     action: ECommitAction;
     path: string;
-    id: number;
+    id: string;
+}
+
+export interface ICommitter {
+    name: string;
+    email?: string;
+}
+
+export interface IFileInfo {
+    id: string;
+    commitId: string;
+    size: number;
+    content: string;
+}
+
+export interface IGitObject {
+    id: string;
+    name: string;
+    path: string;
+    filemode: number;
+    isTree: boolean;
+    isBlob: boolean;
+    children?: IGitObject[];
+}
+
+export interface IHistoryInfo {
+    commitId: string;
+    date: string;
+    message: string;
 }
 
 export interface IGuardAPI {
-    getFileInfo(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<any>;
-    getFileRawData(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<any>;
-    upsertFile(baseUrl: string, repoPath: string, filePath: string, content: string): Promise<any>;
-    deleteFile(baseUrl: string, repoPath: string, filePath: string): Promise<any>;
-    getFileHistory(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<any>;
-    downloadRepo(baseUrl: string, repoPath: string, ref?: string): Promise<any>;
-    commitFiles(baseUrl: string, repoPath: string, files: ICommitFile[]): Promise<any>;
-    getFilesUnderFolder(baseUrl: string, repoPath: string, folderPath: string, recursive: boolean): Promise<any>;
+    getFileInfo(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IFileInfo>;
+    getFileRawData(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<string>;
+    upsertFile(baseUrl: string, repoPath: string, filePath: string, content: string, committer?: ICommitter): Promise<string>;
+    deleteFile(baseUrl: string, repoPath: string, filePath: string, committer?: ICommitter): Promise<boolean>;
+    getFileHistory(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IHistoryInfo[]>;
+    downloadRepo(baseUrl: string, repoPath: string, ref?: string): Promise<string>;
+    commitFiles(baseUrl: string, repoPath: string, files: ICommitFile[], committer?: ICommitter): Promise<boolean>;
+    getFilesUnderFolder(baseUrl: string, repoPath: string, folderPath: string, recursive: boolean): Promise<IGitObject[]>;
 }
 
 export interface IAPI {

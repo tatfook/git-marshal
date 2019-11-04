@@ -1,0 +1,16 @@
+{
+    "extends": ["tslint-config-egg"],
+    "rules": {
+        "indent": [true, "spaces", 4],
+        "max-len": [
+            "error",
+            {
+                "code": 160
+            }
+        ],
+        "no-bitwise": false,
+        "no-magic-numbers": false,
+        "no-console": false,
+        "array-bracket-spacing": [true, "never"]
+    }
+}

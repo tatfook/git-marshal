@@ -35,7 +35,7 @@ export default class MarshalBoot implements IBoot {
 
     async serverDidReady() {
         // Server is listening.
-        await this.app.model.Guard.reloadCache();
+        if (process.env.NODE_ENV !== 'test') await this.app.model.Guard.reloadCache();
     }
 
     async beforeClose() {

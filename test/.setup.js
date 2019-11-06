@@ -10,13 +10,6 @@ before(() => {
 });
 
 afterEach(async () => {
-    // clear database after each test case
-    await Promise.all([
-        app.redis.flushdb(),
-        // define your own model.destroy here
-        app.model.Admin.destroy({ truncate: true, force: true }),
-        app.model.Guard.destroy({ truncate: true, force: true }),
-        app.model.Space.destroy({ truncate: true, force: true }),
-        app.model.Repo.destroy({ truncate: true, force: true }),
-    ]);
+    await app.redis.flushdb();
+    await app.model.truncate({ restartIdentity: true });
 });

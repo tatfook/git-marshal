@@ -19,6 +19,7 @@ import 'egg-redis';
 import 'egg-cors';
 import 'egg-bcrypt';
 import 'egg-parameters';
+import 'egg-tracer';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
   interface EggPlugin {
@@ -39,5 +40,6 @@ declare module 'egg' {
     cors?: EggPluginItem;
     bcrypt?: EggPluginItem;
     parameters?: EggPluginItem;
+    tracer?: EggPluginItem;
   }
 }

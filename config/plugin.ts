@@ -21,6 +21,10 @@ const plugin: EggPlugin = {
         enable: true,
         package: 'egg-parameters',
     },
+    tracer: {
+        enable: true,
+        package: 'egg-tracer',
+    },
 };
 
 export default plugin;

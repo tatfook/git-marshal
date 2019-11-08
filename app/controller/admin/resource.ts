@@ -19,7 +19,7 @@ export default class ResourceBaseController extends Controller {
         await this.ensureAdmin();
         const resource = await this.getResource();
         const query = this.ctx.request.body || {};
-        const list = await resource.findAndCount(query);
+        const list = await resource.findAndCountAll(query);
         this.ctx.body = list;
     }
 
@@ -27,7 +27,7 @@ export default class ResourceBaseController extends Controller {
         await this.ensureAdmin();
         const resource = await this.getResource();
         const query = this.ctx.query || {};
-        const list = await resource.findAndCount({ where: query });
+        const list = await resource.findAndCountAll({ where: query });
         this.ctx.body = list;
     }
 

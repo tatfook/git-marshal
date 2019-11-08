@@ -5,7 +5,8 @@ export default (app: Application) => {
 
     router.get('/', controller.home.index);
 
-    router.post('/admin/signIn', controller.admin.session.sighIn);
+    router.post('/admin/login', controller.admin.session.sighIn);
+    router.post('/admin/logout', controller.admin.session.sighOut);
     router.get('/admin/current', controller.admin.session.current);
 
     router.post('/admin/:resources/search', controller.admin.resource.search);

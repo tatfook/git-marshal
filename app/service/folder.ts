@@ -1,5 +1,6 @@
 import { Service } from 'egg';
 import * as _ from 'lodash';
+import API from '../common/api';
 import { KEEP } from '../common/const/git';
 import { ICommitFile, ECommitAction, IGitObject, ICommitter } from '../../typings/custom/api';
 
@@ -10,11 +11,11 @@ export default class FolderService extends Service {
     }
 
     public async getFiles(repoPath: string, folderPath: string, recursive: boolean = false) {
-        const { ctx, app } = this;
+        const { ctx } = this;
         const repo = await ctx.service.repo.getRepoByPath(repoPath);
         const guard = await ctx.service.guard.findById(repo.guardId);
         folderPath = _.trim(folderPath, ' /');
-        return app.api.guard.getFilesUnderFolder(guard.url, repo.path, folderPath, recursive);
+        return API.guard.getFilesUnderFolder(guard.url, repo.path, folderPath, recursive);
     }
 
     // Warning: will overwrite files under new folder
@@ -25,10 +26,10 @@ export default class FolderService extends Service {
         const repo = await ctx.service.repo.getRepoByPath(repoPath);
         const guard = await ctx.service.guard.findById(repo.guardId);
         folderPath = _.trim(folderPath, ' /');
-        const folderFiles = await ctx.app.api.guard.getFilesUnderFolder(guard.url, repo.path, folderPath, true);
+        const folderFiles = await API.guard.getFilesUnderFolder(guard.url, repo.path, folderPath, true);
 
         const files: ICommitFile[] = this.genMovingFilesCommands(folderFiles, folderPath, newFolderPath);
-        return ctx.app.api.guard.commitFiles(guard.url, repo.path, files, committer);
+        return API.guard.commitFiles(guard.url, repo.path, files, committer);
     }
 
     public async deleteFolder(repoPath: string, folderPath: string, committer?: ICommitter) {
@@ -37,9 +38,9 @@ export default class FolderService extends Service {
         const repo = await ctx.service.repo.getRepoByPath(repoPath);
         const guard = await ctx.service.guard.findById(repo.guardId);
         folderPath = _.trim(folderPath, ' /');
-        const folderFiles = await ctx.app.api.guard.getFilesUnderFolder(guard.url, repo.path, folderPath, true);
+        const folderFiles = await ctx.API.guard.getFilesUnderFolder(guard.url, repo.path, folderPath, true);
         const files: ICommitFile[] = this.genDeletingFilesCommands(folderFiles, folderPath);
-        return ctx.app.api.guard.commitFiles(guard.url, repo.path, files, committer);
+        return API.guard.commitFiles(guard.url, repo.path, files, committer);
     }
 
     public genMovingFilesCommands(folderFiles: IGitObject[], folderPath: string, newFolderPath: string): ICommitFile[] {

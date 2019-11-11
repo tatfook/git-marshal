@@ -1,5 +1,6 @@
 import { Service } from 'egg';
 import * as _ from 'lodash';
+import API from '../common/api';
 import { ISpace } from '../../typings/custom/model';
 
 export default class RepoService extends Service {
@@ -22,7 +23,7 @@ export default class RepoService extends Service {
         const { ctx } = this;
         const repo = await this.getRepoByPath(repoPath);
         const guard = await ctx.service.guard.findById(repo.guardId);
-        return this.app.api.guard.downloadRepo(guard.url, repo.path, ref);
+        return API.guard.downloadRepo(guard.url, repo.path, ref);
     }
 
     private buildRepoPath(space: ISpace, repoName: string) {

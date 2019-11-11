@@ -1,8 +1,6 @@
-import { Application } from 'egg';
-import GuardAPI from './guard';
+import guard from './guard';
+import { IAPI } from '../../../typings/custom/api';
 
-export default (app: Application) => {
-    app.api = {
-        guard: GuardAPI(app),
-    };
-};
+export default {
+    guard,
+} as IAPI;

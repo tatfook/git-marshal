@@ -1,5 +1,4 @@
 import { Application, IBoot } from 'egg';
-import API from './app/common/api';
 
 export default class MarshalBoot implements IBoot {
     private readonly app: Application;
@@ -20,7 +19,6 @@ export default class MarshalBoot implements IBoot {
 
     async didLoad() {
         // All files have loaded, start plugin here.
-        API(this.app);
     }
 
     async willReady() {

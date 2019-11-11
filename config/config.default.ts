@@ -23,19 +23,6 @@ export default (appInfo: EggAppInfo) => {
         },
     };
 
-    config.httpclient = {
-        request: {
-            timeout: 5000,
-        },
-        httpAgent: {
-            keepAlive: true,
-            freeSocketTimeout: 4000,
-            timeout: 30000,
-            maxSockets: Number.MAX_SAFE_INTEGER,
-            maxFreeSockets: 256,
-        },
-    };
-
     config.bcrypt = {
         saltRounds: 10, // default 10
     };

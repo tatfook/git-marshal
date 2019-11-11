@@ -29,22 +29,10 @@ export default class RepoService extends Service {
         return space.name + '/' + repoName;
     }
 
-    // filePath: /a/b/c or a/b/c
-    // return: a/b
-    private getRepoPath(filePath: string) {
-        const arr = _.trim(filePath, ' /').split('/');
-        if (arr.length > 1) return arr[0] + '/' + arr[1];
-    }
-
-    public async getRepoByFullPath(fullPath: string) {
-        const { ctx } = this;
-        const repoPath = this.getRepoPath(fullPath);
-        if (!repoPath) return ctx.throw('invalid file path');
-        return await this.getRepoByPath(repoPath);
-    }
-
     public async getRepoByPath(repoPath: string) {
         const { ctx } = this;
+        repoPath = _.trim(repoPath, ' /');
+        if (repoPath === '') ctx.throw('repo not found');
         let repo = await ctx.model.Repo.getCachedRepoByPath(repoPath);
         if (!repo) {
             repo = await ctx.model.Repo.findOne({ where: { path: repoPath } });

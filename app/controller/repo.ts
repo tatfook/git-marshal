@@ -7,7 +7,7 @@ export default class RepoController extends Controller {
     }
 
     public async download() {
-        const { path, ref } = this.ctx.params;
-        this.ctx.body = await this.ctx.service.repo.downloadRepo(path, ref);
+        const { repoPath, ref } = this.ctx.params;
+        this.ctx.body = await this.ctx.service.repo.downloadRepo(repoPath, ref);
     }
 }

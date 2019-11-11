@@ -32,6 +32,7 @@
         "egg-scripts": "^2.6.0",
         "egg-sequelize": "^5.0.0",
         "egg-tracer": "^1.1.0",
+        "js-base64": "^2.5.1",
         "lodash": "^4.17.11",
         "mysql2": "^1.6.5",
         "pluralize": "^7.0.0",

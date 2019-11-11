@@ -1,68 +1,68 @@
 import { Service } from 'egg';
 import * as _ from 'lodash';
 import { ICommitFile, ECommitAction, ICommitter } from '../../typings/custom/api';
-import { IRepo, IGuard } from '../../typings/custom/model';
 
 export default class FileService extends Service {
-    public async upsertFile(fileFullPath: string, content: string, committer?: ICommitter) {
-        const { repo, guard, filePath } = await this.getDataFromFilePath(fileFullPath);
-        return this.app.api.guard.upsertFile(guard.url, repo.path, filePath, content, committer);
-    }
-
-    public async deleteFile(fileFullPath: string, committer?: ICommitter) {
-        const { repo, guard, filePath } = await this.getDataFromFilePath(fileFullPath);
-        return this.app.api.guard.deleteFile(guard.url, repo.path, filePath, committer);
-    }
-
-    // Waring: make sure the file path is full, eg: space/repo/file.txt
-    public async moveFile(fileFullPath: string, newFileFullPath: string, committer?: ICommitter) {
-        const { ctx } = this;
-        const { repo, guard, filePath } = await this.getDataFromFilePath(fileFullPath);
-        if (_.startsWith(newFileFullPath, repo.path)) {
-            const newFilePath = newFileFullPath.slice(repo.path.length + 1);
-            if (!newFilePath) this.ctx.throw('invalid new file path');
-            const file = await this.app.api.guard.getFileInfo(guard.url, repo.path, filePath);
-            const files: ICommitFile[] = [
-                {
-                    action: ECommitAction.UPSERT,
-                    path: newFilePath,
-                    id: file.id,
-                },
-                {
-                    action: ECommitAction.REMOVE,
-                    path: filePath,
-                    id: file.id,
-                },
-            ];
-            return ctx.app.api.guard.commitFiles(guard.url, repo.path, files, committer);
-        } else {
-            return ctx.throw('only support moving files in the same repo');
-        }
-    }
-
-    public async getFileHistory(fileFullPath: string, commitId?: string) {
-        const { repo, guard, filePath } = await this.getDataFromFilePath(fileFullPath);
-        return this.app.api.guard.getFileHistory(guard.url, repo.path, filePath, commitId);
-    }
-
-    public async getFileInfo(fileFullPath: string, commitId?: string) {
-        const { repo, guard, filePath } = await this.getDataFromFilePath(fileFullPath);
-        return this.app.api.guard.getFileInfo(guard.url, repo.path, filePath, commitId);
-    }
-
-    public async getFileRawData(fileFullPath: string, commitId?: string) {
-        const { repo, guard, filePath } = await this.getDataFromFilePath(fileFullPath);
-        return this.app.api.guard.getFileRawData(guard.url, repo.path, filePath, commitId);
-    }
-
-    private async getDataFromFilePath(fileFullPath: string): Promise<{ repo: IRepo; guard: IGuard; filePath: string }> {
-        const { ctx } = this;
-        fileFullPath = _.trim(fileFullPath, ' /');
-        const repo = await ctx.service.repo.getRepoByFullPath(fileFullPath);
+    public async upsertFile(repoPath: string, filePath: string, content: string, committer?: ICommitter) {
+        const { ctx, app } = this;
+        const repo = await ctx.service.repo.getRepoByPath(repoPath);
         const guard = await ctx.service.guard.findById(repo.guardId);
-        const filePath = fileFullPath.slice(repo.path.length + 1);
-        if (!filePath) this.ctx.throw('invalid file path');
+        filePath = _.trim(filePath, ' /');
+        return app.api.guard.upsertFile(guard.url, repo.path, filePath, content, committer);
+    }
 
-        return { repo, guard, filePath };
+    public async deleteFile(repoPath: string, filePath: string, committer?: ICommitter) {
+        const { ctx, app } = this;
+        const repo = await ctx.service.repo.getRepoByPath(repoPath);
+        const guard = await ctx.service.guard.findById(repo.guardId);
+        filePath = _.trim(filePath, ' /');
+        return app.api.guard.deleteFile(guard.url, repo.path, filePath, committer);
+    }
+
+    public async moveFile(repoPath: string, filePath: string, newFilePath: string, committer?: ICommitter) {
+        const { ctx, app } = this;
+        if (!newFilePath) ctx.throw('invalid new file path');
+        const repo = await ctx.service.repo.getRepoByPath(repoPath);
+        const guard = await ctx.service.guard.findById(repo.guardId);
+        filePath = _.trim(filePath, ' /');
+        newFilePath = _.trim(newFilePath, ' /');
+        const file = await app.api.guard.getFileInfo(guard.url, repo.path, filePath);
+        const files: ICommitFile[] = [
+            {
+                action: ECommitAction.UPSERT,
+                path: newFilePath,
+                id: file.id,
+            },
+            {
+                action: ECommitAction.REMOVE,
+                path: filePath,
+                id: file.id,
+            },
+        ];
+        return ctx.app.api.guard.commitFiles(guard.url, repo.path, files, committer);
+    }
+
+    public async getFileHistory(repoPath: string, filePath: string, commitId?: string) {
+        const { ctx, app } = this;
+        const repo = await ctx.service.repo.getRepoByPath(repoPath);
+        const guard = await ctx.service.guard.findById(repo.guardId);
+        filePath = _.trim(filePath, ' /');
+        return app.api.guard.getFileHistory(guard.url, repo.path, filePath, commitId);
+    }
+
+    public async getFileInfo(repoPath: string, filePath: string, commitId?: string) {
+        const { ctx, app } = this;
+        const repo = await ctx.service.repo.getRepoByPath(repoPath);
+        const guard = await ctx.service.guard.findById(repo.guardId);
+        filePath = _.trim(filePath, ' /');
+        return app.api.guard.getFileInfo(guard.url, repo.path, filePath, commitId);
+    }
+
+    public async getFileRawData(repoPath: string, filePath: string, commitId?: string) {
+        const { ctx, app } = this;
+        const repo = await ctx.service.repo.getRepoByPath(repoPath);
+        const guard = await ctx.service.guard.findById(repo.guardId);
+        filePath = _.trim(filePath, ' /');
+        return app.api.guard.getFileRawData(guard.url, repo.path, filePath, commitId);
     }
 }

@@ -4,6 +4,7 @@ import { IGuardAPI, ICommitFile, IFileInfo, IGitObject, IHistoryInfo, ICommitter
 const buildGuardAPI = (app: Application): IGuardAPI => {
     const getFileInfo = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IFileInfo> => {
         const result = await app.curl(`${baseUrl}/file`, {
+            dataType: 'json',
             data: {
                 repopath: repoPath,
                 filepath: filePath,
@@ -27,6 +28,9 @@ const buildGuardAPI = (app: Application): IGuardAPI => {
     const upsertFile = async (baseUrl: string, repoPath: string, filePath: string, content: string, committer?: ICommitter): Promise<string> => {
         const result = await app.curl(`${baseUrl}/file`, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             data: {
                 repopath: repoPath,
                 filepath: filePath,
@@ -52,6 +56,7 @@ const buildGuardAPI = (app: Application): IGuardAPI => {
 
     const getFileHistory = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IHistoryInfo[]> => {
         const result = await app.curl(`${baseUrl}/file/history`, {
+            dataType: 'json',
             data: {
                 repopath: repoPath,
                 filepath: filePath,
@@ -74,6 +79,9 @@ const buildGuardAPI = (app: Application): IGuardAPI => {
     const commitFiles = async (baseUrl: string, repoPath: string, files: ICommitFile[], committer?: ICommitter) => {
         const result = await app.curl(`${baseUrl}/file/commit`, {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             data: {
                 repopath: repoPath,
                 files,
@@ -85,6 +93,7 @@ const buildGuardAPI = (app: Application): IGuardAPI => {
 
     const getFilesUnderFolder = async (baseUrl: string, repoPath: string, folderPath: string, recursive: boolean = false): Promise<IGitObject[]> => {
         const result = await app.curl(`${baseUrl}/file/tree`, {
+            dataType: 'json',
             data: {
                 repopath: repoPath,
                 filepath: folderPath,

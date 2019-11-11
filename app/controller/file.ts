@@ -2,32 +2,32 @@ import { Controller } from 'egg';
 
 export default class FileController extends Controller {
     public async upsert() {
-        const { path, content, committer } = this.ctx.params;
-        this.ctx.body = await this.ctx.service.file.upsertFile(path, content, { name: committer });
+        const { repoPath, filePath, content, committer } = this.ctx.params;
+        this.ctx.body = await this.ctx.service.file.upsertFile(repoPath, filePath, content, { name: committer });
     }
 
     public async history() {
-        const { path, commitId } = this.ctx.params;
-        this.ctx.body = await this.ctx.service.file.getFileHistory(path, commitId);
+        const { repoPath, filePath, commitId } = this.ctx.params;
+        this.ctx.body = await this.ctx.service.file.getFileHistory(repoPath, filePath, commitId);
     }
 
     public async raw() {
-        const { path, commitId } = this.ctx.params;
-        this.ctx.body = await this.ctx.service.file.getFileRawData(path, commitId);
+        const { repoPath, filePath, commitId } = this.ctx.params;
+        this.ctx.body = await this.ctx.service.file.getFileRawData(repoPath, filePath, commitId);
     }
 
     public async show() {
-        const { path, commitId } = this.ctx.params;
-        this.ctx.body = await this.ctx.service.file.getFileInfo(path, commitId);
+        const { repoPath, filePath, commitId } = this.ctx.params;
+        this.ctx.body = await this.ctx.service.file.getFileInfo(repoPath, filePath, commitId);
     }
 
     public async destroy() {
-        const { path, committer } = this.ctx.params;
-        this.ctx.body = await this.ctx.service.file.deleteFile(path, { name: committer });
+        const { repoPath, filePath, committer } = this.ctx.params;
+        this.ctx.body = await this.ctx.service.file.deleteFile(repoPath, filePath, { name: committer });
     }
 
     public async move() {
-        const { path, newPath, committer } = this.ctx.params;
-        this.ctx.body = await this.ctx.service.file.moveFile(path, newPath, { name: committer });
+        const { repoPath, filePath, newFilePath, committer } = this.ctx.params;
+        this.ctx.body = await this.ctx.service.file.moveFile(repoPath, filePath, newFilePath, { name: committer });
     }
 }

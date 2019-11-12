@@ -13,7 +13,7 @@ export default (app: Application) => {
     router.delete('/admin/:resources/destroyAll', controller.admin.resource.destroyAll);
     router.resources('/admin/:resources', '/admin/:resources', controller.admin.resource);
 
-    router.post('/spaces/register', controller.space.register);
+    router.post('/spaces', controller.space.create);
 
     router.post('/repos', controller.repo.create);
     router.get('/repos/download', controller.repo.download);

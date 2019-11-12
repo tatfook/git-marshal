@@ -71,7 +71,7 @@ export default class FolderService extends Service {
     public genDeletingFilesCommands(folderFiles: any[], folderPath: string): ICommitFile[] {
         const files = folderFiles.map((file): ICommitFile | ICommitFile[] => {
             if (file.isTree) {
-                return this.genDeletingFilesCommands(file.children, folderPath); // handling sub folder
+                return this.genDeletingFilesCommands(file.children || [], folderPath); // handling sub folder
             } else {
                 const fileFullPath = folderPath === '' ? file.path : `${folderPath}/${file.path}`;
                 return {

@@ -38,7 +38,7 @@ export default class FolderService extends Service {
         const repo = await ctx.service.repo.getRepoByPath(repoPath);
         const guard = await ctx.service.guard.findById(repo.guardId);
         folderPath = _.trim(folderPath, ' /');
-        const folderFiles = await ctx.API.guard.getFilesUnderFolder(guard.url, repo.path, folderPath, true);
+        const folderFiles = await API.guard.getFilesUnderFolder(guard.url, repo.path, folderPath, true);
         const files: ICommitFile[] = this.genDeletingFilesCommands(folderFiles, folderPath);
         return API.guard.commitFiles(guard.url, repo.path, files, committer);
     }

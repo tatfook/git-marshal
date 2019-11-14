@@ -14,7 +14,7 @@ module.exports = {
                 },
 
                 name: {
-                    type: STRING(16),
+                    type: STRING(64),
                     unique: true,
                     allowNull: false,
                 },

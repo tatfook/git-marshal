@@ -30,14 +30,14 @@ const schema = {
 
     name: {
         // tslint:disable-next-line:no-magic-numbers
-        type: STRING(16),
+        type: STRING(128),
         allowNull: false,
     },
 
     path: {
         // repo full path: namespace/repoName
         // tslint:disable-next-line:no-magic-numbers
-        type: STRING(36),
+        type: STRING(256),
         allowNull: false,
     },
 

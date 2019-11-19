@@ -9,6 +9,7 @@ type RepoInstance = typeof Sequelize.Model & {
     new (values?: object, options?: Sequelize.BuildOptions): IRepo;
     cacheRepoByPath(repo: IRepo): Promise<any>;
     getCachedRepoByPath(repoPath: string): Promise<IRepo | null>;
+    associate(): void;
 };
 
 const schema = {
@@ -30,14 +31,14 @@ const schema = {
 
     name: {
         // tslint:disable-next-line:no-magic-numbers
-        type: STRING(128),
+        type: STRING(256),
         allowNull: false,
     },
 
     path: {
         // repo full path: namespace/repoName
         // tslint:disable-next-line:no-magic-numbers
-        type: STRING(256),
+        type: STRING(512),
         allowNull: false,
     },
 
@@ -61,7 +62,13 @@ const schemaOption = {
 export default (app: Application) => {
     const Model = app.model.define('repos', schema, schemaOption) as RepoInstance;
 
+    Model.associate = () => {
+        app.model.Repo.belongsTo(app.model.Space);
+        app.model.Repo.belongsTo(app.model.Guard);
+    };
+
     Model.addHook('afterCreate', async (instance: IRepo) => {
+        // update counter
         await app.model.Space.increment(['repoCount'], {
             by: 1,
             where: { id: instance.spaceId },
@@ -73,6 +80,7 @@ export default (app: Application) => {
     });
 
     Model.addHook('beforeDestroy', async (instance: IRepo) => {
+        // update counter
         await app.model.Space.increment(['repoCount'], {
             by: -1,
             where: { id: instance.spaceId },

@@ -24,13 +24,13 @@ module.exports = {
                 },
 
                 name: {
-                    type: STRING(128),
+                    type: STRING(256),
                     allowNull: false,
                 },
 
                 path: {
                     // repo full path: namespace/repoName
-                    type: STRING(256),
+                    type: STRING(512),
                     allowNull: false,
                 },
 

@@ -15,10 +15,26 @@ export default class ResourceBaseController extends Controller {
         return resource;
     }
 
+    // fix: symbol aliases was delete from sequelize5
+    private replaceSymbol(query) {
+        if (_.isObject(query)) {
+            _.forIn(query, (value, key) => {
+                if (_.startsWith(key, '$')) {
+                    query[Symbol.for(_.replace(key, '$', ''))] = this.replaceSymbol(value);
+                    delete query[key];
+                } else {
+                    query[key] = this.replaceSymbol(value);
+                }
+            });
+        }
+        return query;
+    }
+
     async search() {
         await this.ensureAdmin();
         const resource = await this.getResource();
         const query = this.ctx.request.body || {};
+        console.log(this.replaceSymbol(query)); //tslint:disable-line
         const list = await resource.findAndCountAll(query);
         this.ctx.body = list;
     }
@@ -27,7 +43,7 @@ export default class ResourceBaseController extends Controller {
         await this.ensureAdmin();
         const resource = await this.getResource();
         const query = this.ctx.query || {};
-        const list = await resource.findAndCountAll({ where: query });
+        const list = await resource.findAndCountAll(query);
         this.ctx.body = list;
     }
 

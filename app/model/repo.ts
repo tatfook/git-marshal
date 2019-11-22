@@ -24,8 +24,9 @@ const schema = {
         allowNull: false,
     },
 
-    spaceId: {
-        type: BIGINT,
+    space: {
+        // tslint:disable-next-line:no-magic-numbers
+        type: STRING(128),
         allowNull: false,
     },
 
@@ -36,7 +37,7 @@ const schema = {
     },
 
     path: {
-        // repo full path: namespace/repoName
+        // repo full path: space/name
         // tslint:disable-next-line:no-magic-numbers
         type: STRING(512),
         allowNull: false,
@@ -63,16 +64,11 @@ export default (app: Application) => {
     const Model = app.model.define('repos', schema, schemaOption) as RepoInstance;
 
     Model.associate = () => {
-        app.model.Repo.belongsTo(app.model.Space);
         app.model.Repo.belongsTo(app.model.Guard);
     };
 
     Model.addHook('afterCreate', async (instance: IRepo) => {
         // update counter
-        await app.model.Space.increment(['repoCount'], {
-            by: 1,
-            where: { id: instance.spaceId },
-        });
         await app.model.Guard.increment(['repoCount'], {
             by: 1,
             where: { id: instance.guardId },
@@ -81,10 +77,6 @@ export default (app: Application) => {
 
     Model.addHook('beforeDestroy', async (instance: IRepo) => {
         // update counter
-        await app.model.Space.increment(['repoCount'], {
-            by: -1,
-            where: { id: instance.spaceId },
-        });
         await app.model.Guard.increment(['repoCount'], {
             by: -1,
             where: { id: instance.guardId },

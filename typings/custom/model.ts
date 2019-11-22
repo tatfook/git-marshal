@@ -20,18 +20,9 @@ export interface IGuard extends Sequelize.Model {
 export interface IRepo extends Sequelize.Model {
     readonly id: number;
     name: string;
+    space: string;
     path: string;
     guardId: number;
-    spaceId: number;
-    createdAt?: Date;
-    updatedAt?: Date;
-}
-
-export interface ISpace extends Sequelize.Model {
-    readonly id: number;
-    name: string;
-    userId: string;
-    repoCount: number;
     createdAt?: Date;
     updatedAt?: Date;
 }

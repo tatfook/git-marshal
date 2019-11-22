@@ -1,6 +1,33 @@
 import { default as axios } from 'axios';
 import { IGuardAPI, ICommitFile, IFileInfo, IGitObject, IHistoryInfo, ICommitter } from '../../../typings/custom/api';
 
+const downloadRepo = async (baseUrl: string, repoPath: string, ref?: string): Promise<string> => {
+    const result = await axios.get(`${baseUrl}/file/archive`, {
+        params: {
+            repopath: repoPath,
+            ref,
+        },
+    });
+    return result.data;
+};
+
+const deleteRepo = async (baseUrl: string, repoPath: string) => {
+    const result = await axios.delete(`${baseUrl}/repo`, {
+        data: {
+            repopath: repoPath,
+        },
+    });
+    return result.data;
+};
+
+const renameRepo = async (baseUrl: string, repoPath: string, newRepoPath: string) => {
+    const result = await axios.post(`${baseUrl}/repo/rename`, {
+        oldRepoPath: repoPath,
+        newRepoPath,
+    });
+    return result.data;
+};
+
 const getFileInfo = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IFileInfo> => {
     const result = await axios.get(`${baseUrl}/file`, {
         params: {
@@ -56,16 +83,6 @@ const getFileHistory = async (baseUrl: string, repoPath: string, filePath: strin
     return result.data;
 };
 
-const downloadRepo = async (baseUrl: string, repoPath: string, ref?: string): Promise<string> => {
-    const result = await axios.get(`${baseUrl}/file/archive`, {
-        params: {
-            repopath: repoPath,
-            ref,
-        },
-    });
-    return result.data;
-};
-
 const commitFiles = async (baseUrl: string, repoPath: string, files: ICommitFile[], committer?: ICommitter) => {
     const result = await axios.post(`${baseUrl}/file/commit`, {
         repopath: repoPath,
@@ -87,12 +104,14 @@ const getFilesUnderFolder = async (baseUrl: string, repoPath: string, folderPath
 };
 
 export default {
+    downloadRepo,
+    deleteRepo,
+    renameRepo,
     getFileInfo,
     getFileRawData,
     upsertFile,
     deleteFile,
     getFileHistory,
-    downloadRepo,
     commitFiles,
     getFilesUnderFolder,
 } as IGuardAPI;

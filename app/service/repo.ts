@@ -1,18 +1,16 @@
 import { Service } from 'egg';
 import * as _ from 'lodash';
 import API from '../common/api';
-import { ISpace } from '../../typings/custom/model';
 
 export default class RepoService extends Service {
-    public async createRepo(userId: number, repoName: string) {
+    public async createRepo(spaceName: string, repoName: string) {
         const { ctx } = this;
-        const space = await ctx.service.space.findByUserId(userId);
         const guard = await ctx.service.guard.getGuardWithLessRepos();
         const repo = await ctx.model.Repo.create({
             guardId: guard.id,
-            spaceId: space.id,
+            space: spaceName,
             name: repoName,
-            path: this.buildRepoPath(space, repoName),
+            path: this.buildRepoPath(spaceName, repoName),
         });
         if (!repo) ctx.throw('Failed to create repo');
         ctx.model.Repo.cacheRepoByPath(repo);
@@ -26,8 +24,25 @@ export default class RepoService extends Service {
         return API.guard.downloadRepo(guard.url, repo.path, ref);
     }
 
-    private buildRepoPath(space: ISpace, repoName: string) {
-        return space.name + '/' + repoName;
+    public async deleteRepo(repoPath) {
+        const { ctx } = this;
+        const repo = await this.getRepoByPath(repoPath);
+        const guard = await ctx.service.guard.findById(repo.guardId);
+        await API.guard.deleteRepo(guard.url, repo.path);
+        return repo.destroy();
+    }
+
+    public async renameRepo(repoPath, newRepoName) {
+        const { ctx } = this;
+        const repo = await this.getRepoByPath(repoPath);
+        const guard = await ctx.service.guard.findById(repo.guardId);
+        const newRepoPath = this.buildRepoPath(repo.space, newRepoName);
+        await API.guard.renameRepo(guard.url, repoPath, newRepoPath);
+        return repo.update({ path: newRepoPath, name: newRepoName });
+    }
+
+    private buildRepoPath(spaceName: string, repoName: string) {
+        return spaceName + '/' + repoName;
     }
 
     public async getRepoByPath(repoPath: string) {

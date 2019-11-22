@@ -18,8 +18,8 @@ module.exports = {
                     allowNull: false,
                 },
 
-                spaceId: {
-                    type: BIGINT,
+                space: {
+                    type: STRING(128),
                     allowNull: false,
                 },
 
@@ -29,7 +29,7 @@ module.exports = {
                 },
 
                 path: {
-                    // repo full path: namespace/repoName
+                    // repo full path: space/name
                     type: STRING(512),
                     allowNull: false,
                 },
@@ -52,7 +52,7 @@ module.exports = {
         );
 
         await queryInterface.addIndex('repos', { fields: ['guardId'] });
-        await queryInterface.addIndex('repos', { fields: ['spaceId'] });
+        await queryInterface.addIndex('repos', { fields: ['space', 'name'], unique: true });
         await queryInterface.addIndex('repos', { fields: ['path'], unique: true });
     },
 

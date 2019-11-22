@@ -34,7 +34,6 @@ export default class ResourceBaseController extends Controller {
         await this.ensureAdmin();
         const resource = await this.getResource();
         const query = this.ctx.request.body || {};
-        console.log(this.replaceSymbol(query)); //tslint:disable-line
         const list = await resource.findAndCountAll(query);
         this.ctx.body = list;
     }

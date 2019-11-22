@@ -37,12 +37,14 @@ export interface IHistoryInfo {
 }
 
 export interface IGuardAPI {
+    downloadRepo(baseUrl: string, repoPath: string, ref?: string): Promise<string>;
+    deleteRepo(baseUrl: string, repoPath: string);
+    renameRepo(baseUrl: string, repoPath: string, newRepoPath: string);
     getFileInfo(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IFileInfo>;
     getFileRawData(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<string>;
     upsertFile(baseUrl: string, repoPath: string, filePath: string, content: string, committer?: ICommitter): Promise<string>;
     deleteFile(baseUrl: string, repoPath: string, filePath: string, committer?: ICommitter): Promise<boolean>;
     getFileHistory(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IHistoryInfo[]>;
-    downloadRepo(baseUrl: string, repoPath: string, ref?: string): Promise<string>;
     commitFiles(baseUrl: string, repoPath: string, files: ICommitFile[], committer?: ICommitter): Promise<boolean>;
     getFilesUnderFolder(baseUrl: string, repoPath: string, folderPath: string, recursive: boolean): Promise<IGitObject[]>;
 }

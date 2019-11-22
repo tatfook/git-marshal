@@ -7,7 +7,6 @@ import ExportFile from '../../../app/service/file';
 import ExportFolder from '../../../app/service/folder';
 import ExportGuard from '../../../app/service/guard';
 import ExportRepo from '../../../app/service/repo';
-import ExportSpace from '../../../app/service/space';
 
 declare module 'egg' {
   interface IService {
@@ -16,6 +15,5 @@ declare module 'egg' {
     folder: ExportFolder;
     guard: ExportGuard;
     repo: ExportRepo;
-    space: ExportSpace;
   }
 }

@@ -7,7 +7,8 @@ const { BIGINT, INTEGER, STRING, DATE } = Sequelize;
 
 type IGuardInstance = typeof Sequelize.Model & {
     new (values?: object, options?: Sequelize.BuildOptions): IGuard;
-    cacheGuard(guard: IGuard): Promise<string>;
+    cacheGuard(guard: IGuard): Promise<any>;
+    removeCachedGuard(guard: IGuard): Promise<any>;
     getCachedGuard(id: number): Promise<IGuard | null>;
     reloadCache(): Promise<any>;
 };
@@ -63,6 +64,10 @@ export default (app: Application) => {
         return app.redis.set(GUARD_PREFIX + guard.id, JSON.stringify(guard));
     };
 
+    Model.removeCachedGuard = async (guard: IGuard) => {
+        return app.redis.del(GUARD_PREFIX + guard.id);
+    };
+
     Model.getCachedGuard = async (id: number) => {
         const jsonStr = await app.redis.get(GUARD_PREFIX + id);
         if (jsonStr) {
@@ -87,6 +92,14 @@ export default (app: Application) => {
         });
         await pipeline.exec();
     };
+
+    Model.addHook('afterUpdate', async (instance: IGuard) => {
+        await app.model.Guard.cacheGuard(instance);
+    });
+
+    Model.addHook('beforeDestroy', async (instance: IGuard) => {
+        await app.model.Guard.removeCachedGuard(instance);
+    });
 
     return Model;
 };

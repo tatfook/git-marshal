@@ -8,7 +8,8 @@
         "declarations": true
     },
     "scripts": {
-        "start": "ets && tsc -p tsconfig.json && egg-scripts start --daemon --title=git-marshal",
+        "start": "ets && tsc -p tsconfig.json && egg-scripts start --title=git-marshal",
+        "daemon": "ets && tsc -p tsconfig.json && egg-scripts start --daemon --title=git-marshal",
         "stop": "egg-scripts stop --title=git-marshal",
         "dev": "egg-bin dev",
         "debug": "egg-bin debug",

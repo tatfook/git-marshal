@@ -27,22 +27,6 @@ export default (appInfo: EggAppInfo) => {
         saltRounds: 10, // default 10
     };
 
-    // change to your own sequelize configurations
-    config.sequelize = {
-        dialect: 'mysql',
-        database: 'marshal_dev',
-    };
-
-    config.redis = {
-        client: {
-            host: '127.0.0.1',
-            port: 6379,
-            password: '',
-            db: 0,
-        },
-        agent: true,
-    };
-
     // the return config will combines to EggAppConfig
     return {
         ...config,

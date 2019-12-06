@@ -9,8 +9,8 @@ module.exports = {
                 {
                     username: 'admin',
                     password: bcrypt.hashSync('123123', 10),
-                    createdAt: new Date().toLocaleString(),
-                    updatedAt: new Date().toLocaleString(),
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
                 },
             ],
             {},

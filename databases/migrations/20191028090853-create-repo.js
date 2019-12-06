@@ -19,18 +19,18 @@ module.exports = {
                 },
 
                 space: {
-                    type: STRING(128),
+                    type: STRING(127),
                     allowNull: false,
                 },
 
                 name: {
-                    type: STRING(256),
+                    type: STRING(127),
                     allowNull: false,
                 },
 
                 path: {
                     // repo full path: space/name
-                    type: STRING(512),
+                    type: STRING(256),
                     allowNull: false,
                 },
 

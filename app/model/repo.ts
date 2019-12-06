@@ -26,20 +26,20 @@ const schema = {
 
     space: {
         // tslint:disable-next-line:no-magic-numbers
-        type: STRING(128),
+        type: STRING(127),
         allowNull: false,
     },
 
     name: {
         // tslint:disable-next-line:no-magic-numbers
-        type: STRING(256),
+        type: STRING(127),
         allowNull: false,
     },
 
     path: {
         // repo full path: space/name
         // tslint:disable-next-line:no-magic-numbers
-        type: STRING(512),
+        type: STRING(256),
         allowNull: false,
     },
 

@@ -18,7 +18,7 @@ export interface IFileInfo {
     id: string;
     commitId: string;
     size: number;
-    content: string;
+    binary: boolean;
     date: string;
     committer: ICommitter;
 }

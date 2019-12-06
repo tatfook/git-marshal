@@ -46,7 +46,7 @@ const getFileInfo = async (baseUrl: string, repoPath: string, filePath: string, 
             commitId,
         },
     });
-    const data: IFileInfo = _.pick(result.data, ['id', 'commitId', 'size', 'content', 'date', 'committer']);
+    const data: IFileInfo = _.pick(result.data, ['id', 'commitId', 'size', 'binary', 'date', 'committer']);
     return data;
 };
 

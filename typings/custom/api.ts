@@ -19,6 +19,8 @@ export interface IFileInfo {
     commitId: string;
     size: number;
     content: string;
+    date: string;
+    committer: ICommitter;
 }
 
 export interface IGitObject {
@@ -34,6 +36,7 @@ export interface IHistoryInfo {
     commitId: string;
     date: string;
     message: string;
+    committer: ICommitter;
 }
 
 export interface IGuardAPI {

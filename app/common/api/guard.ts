@@ -1,4 +1,5 @@
 import { default as axios } from 'axios';
+import * as _ from 'lodash';
 import { IGuardAPI, ICommitFile, IFileInfo, IGitObject, IHistoryInfo, ICommitter } from '../../../typings/custom/api';
 
 const downloadRepo = async (baseUrl: string, repoPath: string, ref?: string): Promise<string> => {
@@ -45,7 +46,8 @@ const getFileInfo = async (baseUrl: string, repoPath: string, filePath: string, 
             commitId,
         },
     });
-    return result.data;
+    const data: IFileInfo = _.pick(result.data, ['id', 'commitId', 'size', 'content', 'date', 'committer']);
+    return data;
 };
 
 const getFileRawData = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<string> => {

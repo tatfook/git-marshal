@@ -102,4 +102,12 @@ describe('test/app/service/repo.test.ts', () => {
             }
         });
     });
+
+    describe('#sync gitlab repo', () => {
+        it('should sync a gitlab repo', async () => {
+            const repoUrl = 'http://git.kp.com/gitlab_www_hello/demo.git';
+            const result = await ctx.service.repo.syncGitlabRepo(repo.path, repoUrl);
+            assert(result);
+        });
+    });
 });

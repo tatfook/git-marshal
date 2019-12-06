@@ -40,6 +40,7 @@ export interface IGuardAPI {
     downloadRepo(baseUrl: string, repoPath: string, ref?: string): Promise<string>;
     deleteRepo(baseUrl: string, repoPath: string);
     renameRepo(baseUrl: string, repoPath: string, newRepoPath: string);
+    syncGitlabRepo(baseUrl: string, repoPath: string, gitlabRepoUrl: string, forceSync?: boolean);
     getFileInfo(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IFileInfo>;
     getFileRawData(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<string>;
     upsertFile(baseUrl: string, repoPath: string, filePath: string, content: string, committer?: ICommitter): Promise<string>;

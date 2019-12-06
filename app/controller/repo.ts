@@ -30,4 +30,10 @@ export default class RepoController extends Controller {
         const { repoPath, newRepoName } = ctx.params;
         ctx.body = await ctx.service.repo.renameRepo(repoPath, newRepoName);
     }
+
+    public async sync() {
+        const { ctx } = this;
+        const { repoPath, gitlabRepoUrl } = ctx.params;
+        ctx.body = await ctx.service.repo.syncGitlabRepo(repoPath, gitlabRepoUrl);
+    }
 }

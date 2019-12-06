@@ -24,7 +24,7 @@ export default class RepoService extends Service {
         return API.guard.downloadRepo(guard.url, repo.path, ref);
     }
 
-    public async deleteRepo(repoPath) {
+    public async deleteRepo(repoPath: string) {
         const { ctx } = this;
         const repo = await this.getRepoByPath(repoPath);
         const guard = await ctx.service.guard.findById(repo.guardId);
@@ -39,6 +39,13 @@ export default class RepoService extends Service {
         const newRepoPath = this.buildRepoPath(repo.space, newRepoName);
         await API.guard.renameRepo(guard.url, repoPath, newRepoPath);
         return repo.update({ path: newRepoPath, name: newRepoName });
+    }
+
+    public async syncGitlabRepo(repoPath: string, gitlabRepoUrl: string) {
+        const { ctx } = this;
+        const repo = await this.getRepoByPath(repoPath);
+        const guard = await ctx.service.guard.findById(repo.guardId);
+        return API.guard.syncGitlabRepo(guard.url, repo.path, gitlabRepoUrl);
     }
 
     private buildRepoPath(spaceName: string, repoName: string) {

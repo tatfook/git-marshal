@@ -28,6 +28,15 @@ const renameRepo = async (baseUrl: string, repoPath: string, newRepoPath: string
     return result.data;
 };
 
+const syncGitlabRepo = async (baseUrl: string, repoPath: string, gitlabRepoUrl: string, forceSync: boolean = false) => {
+    const result = await axios.post(`${baseUrl}/repo/sync`, {
+        repopath: repoPath,
+        gitlabRepoUrl,
+        forceSync,
+    });
+    return result.data;
+};
+
 const getFileInfo = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IFileInfo> => {
     const result = await axios.get(`${baseUrl}/file`, {
         params: {
@@ -107,6 +116,7 @@ export default {
     downloadRepo,
     deleteRepo,
     renameRepo,
+    syncGitlabRepo,
     getFileInfo,
     getFileRawData,
     upsertFile,

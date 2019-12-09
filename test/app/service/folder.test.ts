@@ -6,7 +6,6 @@ import { IGuard, IRepo } from '../../../typings/custom/model';
 
 describe('test/app/service/folder.test.ts', () => {
     let ctx: Context;
-    let guardMorkAPI: string;
     const rootFolderFiles = [
         {
             name: 'dir',
@@ -60,7 +59,6 @@ describe('test/app/service/folder.test.ts', () => {
     ];
     before(() => {
         ctx = app.mockContext();
-        guardMorkAPI = app.config.mockAPI.guard.url;
     });
 
     describe('#genMovingFilesCommands', () => {
@@ -114,7 +112,7 @@ describe('test/app/service/folder.test.ts', () => {
         let guard: IGuard;
         let repo: IRepo;
         beforeEach(async () => {
-            guard = await app.factory.create('guard', { url: guardMorkAPI });
+            guard = await app.factory.create('guard');
             repo = await app.factory.create('repo', {}, { guard });
         });
         it('#createFolder', async () => {

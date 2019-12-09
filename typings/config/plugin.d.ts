@@ -19,6 +19,7 @@ import 'egg-redis';
 import 'egg-cors';
 import 'egg-bcrypt';
 import 'egg-parameters';
+import 'egg-validate';
 import 'egg-tracer';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
@@ -40,6 +41,7 @@ declare module 'egg' {
     cors?: EggPluginItem;
     bcrypt?: EggPluginItem;
     parameters?: EggPluginItem;
+    validate?: EggPluginItem;
     tracer?: EggPluginItem;
   }
 }

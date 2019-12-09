@@ -7,13 +7,11 @@ describe('test/app/service/repo.test.ts', () => {
     let ctx: Context;
     let guard: IGuard;
     let repo: IRepo;
-    let guardMorkAPI: string;
     before(() => {
         ctx = app.mockContext();
-        guardMorkAPI = app.config.mockAPI.guard.url;
     });
     beforeEach(async () => {
-        guard = await app.factory.create('guard', { url: guardMorkAPI });
+        guard = await app.factory.create('guard');
         repo = await app.factory.create('repo', {}, { guard });
     });
 

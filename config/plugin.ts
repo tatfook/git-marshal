@@ -21,6 +21,10 @@ const plugin: EggPlugin = {
         enable: true,
         package: 'egg-parameters',
     },
+    validate: {
+        enable: true,
+        package: 'egg-validate',
+    },
     tracer: {
         enable: true,
         package: 'egg-tracer',

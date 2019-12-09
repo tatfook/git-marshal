@@ -1,16 +1,16 @@
 const { factory } = require('factory-girl');
-const faker = require('faker');
 
 module.exports = app => {
     factory.define('repo', app.model.Repo, async options => {
         const guard = options.guard || (await factory.create('guard'));
-        const repoName = faker.lorem.word();
-        const spaceName = faker.lorem.word();
+        const repoName = await factory.chance('word', { length: 10 })();
+        const spaceName = await factory.chance('word', { length: 10 })();
+        const path = `${spaceName}/${repoName}`;
         return {
             guardId: guard.id,
             space: spaceName,
             name: repoName,
-            path: spaceName + '/' + repoName,
+            path,
         };
     });
 };

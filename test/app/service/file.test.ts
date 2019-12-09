@@ -1,20 +1,16 @@
 import * as assert from 'assert';
 import { Context } from 'egg';
 import { app } from 'egg-mock/bootstrap';
-import { IGuard, IRepo } from '../../../typings/custom/model';
+import { IRepo } from '../../../typings/custom/model';
 
 describe('test/app/service/file.test.ts', () => {
     let ctx: Context;
-    let guard: IGuard;
     let repo: IRepo;
-    let guardMorkAPI: string;
     before(() => {
         ctx = app.mockContext();
-        guardMorkAPI = app.config.mockAPI.guard.url;
     });
     beforeEach(async () => {
-        guard = await app.factory.create('guard', { url: guardMorkAPI });
-        repo = await app.factory.create('repo', {}, { guard });
+        repo = await app.factory.create('repo');
     });
 
     describe('#upsertFile', () => {

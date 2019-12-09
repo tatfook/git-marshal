@@ -12,9 +12,9 @@ export default class FolderController extends Controller {
         const { ctx } = this;
         const { repoPath, folderPath, committer } = ctx.params;
         ctx.validate({
-            repoPath: { type: 'string', required: true },
-            folderPath: { type: 'string', required: true },
-            committer: { type: 'string', required: false },
+            repoPath: 'string',
+            folderPath: 'string',
+            committer: 'string?',
         });
         ctx.body = await ctx.service.folder.createFolder(repoPath, folderPath, { name: committer });
     }
@@ -30,9 +30,9 @@ export default class FolderController extends Controller {
         const { ctx } = this;
         const { repoPath, folderPath, recursive } = ctx.params;
         ctx.validate({
-            repoPath: { type: 'string', required: true },
-            folderPath: { type: 'string', required: false },
-            recursive: { type: 'boolean', required: false },
+            repoPath: 'string',
+            folderPath: 'string?',
+            recursive: 'boolean?',
         });
         ctx.body = await ctx.service.folder.getFiles(repoPath, folderPath, recursive);
     }
@@ -48,9 +48,9 @@ export default class FolderController extends Controller {
         const { ctx } = this;
         const { repoPath, folderPath, committer } = ctx.params;
         ctx.validate({
-            repoPath: { type: 'string', required: true },
-            folderPath: { type: 'string', required: true },
-            committer: { type: 'string', required: false },
+            repoPath: 'string',
+            folderPath: 'string',
+            committer: 'string?',
         });
         ctx.body = await ctx.service.folder.deleteFolder(repoPath, folderPath, { name: committer });
     }
@@ -67,10 +67,10 @@ export default class FolderController extends Controller {
         const { ctx } = this;
         const { repoPath, folderPath, newFolderPath, committer } = ctx.params;
         ctx.validate({
-            repoPath: { type: 'string', required: true },
-            folderPath: { type: 'string', required: true },
-            newFolderPath: { type: 'string', required: true },
-            committer: { type: 'string', required: false },
+            repoPath: 'string',
+            folderPath: 'string',
+            newFolderPath: 'string',
+            committer: 'string?',
         });
         ctx.body = await ctx.service.folder.moveFolder(repoPath, folderPath, newFolderPath, { name: committer });
     }

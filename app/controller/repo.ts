@@ -11,8 +11,8 @@ export default class RepoController extends Controller {
         const { ctx } = this;
         const { space, name } = ctx.params;
         ctx.validate({
-            space: { type: 'string', required: true },
-            name: { type: 'string', required: true },
+            space: 'string',
+            name: 'string',
         });
         ctx.body = await ctx.service.repo.createRepo(space, name);
     }
@@ -27,8 +27,8 @@ export default class RepoController extends Controller {
         const { ctx } = this;
         const { repoPath, ref } = ctx.params;
         ctx.validate({
-            repoPath: { type: 'string', required: true },
-            ref: { type: 'string', required: false },
+            repoPath: 'string',
+            ref: 'string?',
         });
         ctx.body = await ctx.service.repo.downloadRepo(repoPath, ref);
     }
@@ -42,7 +42,7 @@ export default class RepoController extends Controller {
         const { ctx } = this;
         const { repoPath } = ctx.params;
         ctx.validate({
-            repoPath: { type: 'string', required: true },
+            repoPath: 'string',
         });
         ctx.body = await ctx.service.repo.getRepoByPath(repoPath);
     }
@@ -56,7 +56,7 @@ export default class RepoController extends Controller {
         const { ctx } = this;
         const { repoPath } = ctx.params;
         ctx.validate({
-            repoPath: { type: 'string', required: true },
+            repoPath: 'string',
         });
         ctx.body = await ctx.service.repo.deleteRepo(repoPath);
     }
@@ -71,8 +71,8 @@ export default class RepoController extends Controller {
         const { ctx } = this;
         const { repoPath, newRepoName } = ctx.params;
         ctx.validate({
-            repoPath: { type: 'string', required: true },
-            newRepoName: { type: 'string', required: true },
+            repoPath: 'string',
+            newRepoName: 'string',
         });
         ctx.body = await ctx.service.repo.renameRepo(repoPath, newRepoName);
     }
@@ -87,8 +87,8 @@ export default class RepoController extends Controller {
         const { ctx } = this;
         const { repoPath, gitlabRepoUrl } = ctx.params;
         ctx.validate({
-            repoPath: { type: 'string', required: true },
-            gitlabRepoUrl: { type: 'string', required: true },
+            repoPath: 'string',
+            gitlabRepoUrl: 'string',
         });
         ctx.body = await ctx.service.repo.syncGitlabRepo(repoPath, gitlabRepoUrl);
     }

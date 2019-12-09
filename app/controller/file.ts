@@ -13,10 +13,10 @@ export default class FileController extends Controller {
         const { ctx } = this;
         const { repoPath, filePath, content, committer } = ctx.params;
         ctx.validate({
-            repoPath: { type: 'string', required: true },
-            filePath: { type: 'string', required: true },
-            content: { type: 'string', required: true },
-            committer: { type: 'string', required: false },
+            repoPath: 'string',
+            filePath: 'string',
+            content: 'string',
+            committer: 'string?',
         });
         ctx.body = await ctx.service.file.upsertFile(repoPath, filePath, content, { name: committer });
     }
@@ -32,9 +32,9 @@ export default class FileController extends Controller {
         const { ctx } = this;
         const { repoPath, filePath, commitId } = ctx.params;
         ctx.validate({
-            repoPath: { type: 'string', required: true },
-            filePath: { type: 'string', required: true },
-            commitId: { type: 'string', required: false },
+            repoPath: 'string',
+            filePath: 'string',
+            commitId: 'string?',
         });
         ctx.body = await ctx.service.file.getFileHistory(repoPath, filePath, commitId);
     }
@@ -50,9 +50,9 @@ export default class FileController extends Controller {
         const { ctx } = this;
         const { repoPath, filePath, commitId } = ctx.params;
         ctx.validate({
-            repoPath: { type: 'string', required: true },
-            filePath: { type: 'string', required: true },
-            commitId: { type: 'string', required: false },
+            repoPath: 'string',
+            filePath: 'string',
+            commitId: 'string?',
         });
         ctx.body = await ctx.service.file.getFileRawData(repoPath, filePath, commitId);
     }
@@ -68,9 +68,9 @@ export default class FileController extends Controller {
         const { ctx } = this;
         const { repoPath, filePath, commitId } = ctx.params;
         ctx.validate({
-            repoPath: { type: 'string', required: true },
-            filePath: { type: 'string', required: true },
-            commitId: { type: 'string', required: false },
+            repoPath: 'string',
+            filePath: 'string',
+            commitId: 'string?',
         });
         ctx.body = await ctx.service.file.getFileInfo(repoPath, filePath, commitId);
     }
@@ -86,9 +86,9 @@ export default class FileController extends Controller {
         const { ctx } = this;
         const { repoPath, filePath, committer } = ctx.params;
         ctx.validate({
-            repoPath: { type: 'string', required: true },
-            filePath: { type: 'string', required: true },
-            committer: { type: 'string', required: false },
+            repoPath: 'string',
+            filePath: 'string',
+            committer: 'string?',
         });
         ctx.body = await ctx.service.file.deleteFile(repoPath, filePath, { name: committer });
     }
@@ -105,10 +105,10 @@ export default class FileController extends Controller {
         const { ctx } = this;
         const { repoPath, filePath, newFilePath, committer } = ctx.params;
         ctx.validate({
-            repoPath: { type: 'string', required: true },
-            filePath: { type: 'string', required: true },
-            newFilePath: { type: 'string', required: true },
-            committer: { type: 'string', required: false },
+            repoPath: 'string',
+            filePath: 'string',
+            newFilePath: 'string',
+            committer: 'string?',
         });
         ctx.body = await ctx.service.file.moveFile(repoPath, filePath, newFilePath, { name: committer });
     }

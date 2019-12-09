@@ -19,12 +19,12 @@ module.exports = {
                 },
 
                 space: {
-                    type: STRING(127),
+                    type: STRING(128),
                     allowNull: false,
                 },
 
                 name: {
-                    type: STRING(127),
+                    type: STRING(128),
                     allowNull: false,
                 },
 

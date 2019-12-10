@@ -9,11 +9,14 @@ export default class RepoController extends Controller {
      */
     public async create() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                space: 'string',
+                name: 'string',
+            },
+            ctx.params,
+        );
         const { space, name } = ctx.params;
-        ctx.validate({
-            space: 'string',
-            name: 'string',
-        });
         ctx.body = await ctx.service.repo.createRepo(space, name);
     }
 
@@ -25,11 +28,14 @@ export default class RepoController extends Controller {
      */
     public async download() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                ref: 'string?',
+            },
+            ctx.params,
+        );
         const { repoPath, ref } = ctx.params;
-        ctx.validate({
-            repoPath: 'string',
-            ref: 'string?',
-        });
         ctx.body = await ctx.service.repo.downloadRepo(repoPath, ref);
     }
 
@@ -40,10 +46,13 @@ export default class RepoController extends Controller {
      */
     public async show() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+            },
+            ctx.params,
+        );
         const { repoPath } = ctx.params;
-        ctx.validate({
-            repoPath: 'string',
-        });
         ctx.body = await ctx.service.repo.getRepoByPath(repoPath);
     }
 
@@ -54,10 +63,13 @@ export default class RepoController extends Controller {
      */
     public async destroy() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+            },
+            ctx.params,
+        );
         const { repoPath } = ctx.params;
-        ctx.validate({
-            repoPath: 'string',
-        });
         ctx.body = await ctx.service.repo.deleteRepo(repoPath);
     }
 
@@ -69,11 +81,14 @@ export default class RepoController extends Controller {
      */
     public async rename() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                newRepoName: 'string',
+            },
+            ctx.params,
+        );
         const { repoPath, newRepoName } = ctx.params;
-        ctx.validate({
-            repoPath: 'string',
-            newRepoName: 'string',
-        });
         ctx.body = await ctx.service.repo.renameRepo(repoPath, newRepoName);
     }
 
@@ -85,11 +100,14 @@ export default class RepoController extends Controller {
      */
     public async sync() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                gitlabRepoUrl: 'string',
+            },
+            ctx.params,
+        );
         const { repoPath, gitlabRepoUrl } = ctx.params;
-        ctx.validate({
-            repoPath: 'string',
-            gitlabRepoUrl: 'string',
-        });
         ctx.body = await ctx.service.repo.syncGitlabRepo(repoPath, gitlabRepoUrl);
     }
 }

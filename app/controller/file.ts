@@ -11,13 +11,16 @@ export default class FileController extends Controller {
      */
     public async upsert() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                filePath: 'string',
+                content: 'string',
+                committer: 'string?',
+            },
+            ctx.params,
+        );
         const { repoPath, filePath, content, committer } = ctx.params;
-        ctx.validate({
-            repoPath: 'string',
-            filePath: 'string',
-            content: 'string',
-            committer: 'string?',
-        });
         ctx.body = await ctx.service.file.upsertFile(repoPath, filePath, content, { name: committer });
     }
 
@@ -30,12 +33,15 @@ export default class FileController extends Controller {
      */
     public async history() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                filePath: 'string',
+                commitId: 'string?',
+            },
+            ctx.params,
+        );
         const { repoPath, filePath, commitId } = ctx.params;
-        ctx.validate({
-            repoPath: 'string',
-            filePath: 'string',
-            commitId: 'string?',
-        });
         ctx.body = await ctx.service.file.getFileHistory(repoPath, filePath, commitId);
     }
 
@@ -48,12 +54,15 @@ export default class FileController extends Controller {
      */
     public async raw() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                filePath: 'string',
+                commitId: 'string?',
+            },
+            ctx.params,
+        );
         const { repoPath, filePath, commitId } = ctx.params;
-        ctx.validate({
-            repoPath: 'string',
-            filePath: 'string',
-            commitId: 'string?',
-        });
         ctx.body = await ctx.service.file.getFileRawData(repoPath, filePath, commitId);
     }
 
@@ -66,12 +75,15 @@ export default class FileController extends Controller {
      */
     public async show() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                filePath: 'string',
+                commitId: 'string?',
+            },
+            ctx.params,
+        );
         const { repoPath, filePath, commitId } = ctx.params;
-        ctx.validate({
-            repoPath: 'string',
-            filePath: 'string',
-            commitId: 'string?',
-        });
         ctx.body = await ctx.service.file.getFileInfo(repoPath, filePath, commitId);
     }
 
@@ -84,12 +96,15 @@ export default class FileController extends Controller {
      */
     public async destroy() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                filePath: 'string',
+                committer: 'string?',
+            },
+            ctx.params,
+        );
         const { repoPath, filePath, committer } = ctx.params;
-        ctx.validate({
-            repoPath: 'string',
-            filePath: 'string',
-            committer: 'string?',
-        });
         ctx.body = await ctx.service.file.deleteFile(repoPath, filePath, { name: committer });
     }
 
@@ -103,13 +118,16 @@ export default class FileController extends Controller {
      */
     public async move() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                filePath: 'string',
+                newFilePath: 'string',
+                committer: 'string?',
+            },
+            ctx.params,
+        );
         const { repoPath, filePath, newFilePath, committer } = ctx.params;
-        ctx.validate({
-            repoPath: 'string',
-            filePath: 'string',
-            newFilePath: 'string',
-            committer: 'string?',
-        });
         ctx.body = await ctx.service.file.moveFile(repoPath, filePath, newFilePath, { name: committer });
     }
 }

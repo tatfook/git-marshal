@@ -10,12 +10,15 @@ export default class FolderController extends Controller {
      */
     public async create() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                folderPath: 'string',
+                committer: 'string?',
+            },
+            ctx.params,
+        );
         const { repoPath, folderPath, committer } = ctx.params;
-        ctx.validate({
-            repoPath: 'string',
-            folderPath: 'string',
-            committer: 'string?',
-        });
         ctx.body = await ctx.service.folder.createFolder(repoPath, folderPath, { name: committer });
     }
 
@@ -28,12 +31,15 @@ export default class FolderController extends Controller {
      */
     public async files() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                folderPath: 'string?',
+                recursive: 'boolean?',
+            },
+            ctx.params,
+        );
         const { repoPath, folderPath, recursive } = ctx.params;
-        ctx.validate({
-            repoPath: 'string',
-            folderPath: 'string?',
-            recursive: 'boolean?',
-        });
         ctx.body = await ctx.service.folder.getFiles(repoPath, folderPath, recursive);
     }
 
@@ -46,12 +52,15 @@ export default class FolderController extends Controller {
      */
     public async destroy() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                folderPath: 'string',
+                committer: 'string?',
+            },
+            ctx.params,
+        );
         const { repoPath, folderPath, committer } = ctx.params;
-        ctx.validate({
-            repoPath: 'string',
-            folderPath: 'string',
-            committer: 'string?',
-        });
         ctx.body = await ctx.service.folder.deleteFolder(repoPath, folderPath, { name: committer });
     }
 
@@ -65,13 +74,16 @@ export default class FolderController extends Controller {
      */
     public async move() {
         const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                folderPath: 'string',
+                newFolderPath: 'string',
+                committer: 'string?',
+            },
+            ctx.params,
+        );
         const { repoPath, folderPath, newFolderPath, committer } = ctx.params;
-        ctx.validate({
-            repoPath: 'string',
-            folderPath: 'string',
-            newFolderPath: 'string',
-            committer: 'string?',
-        });
         ctx.body = await ctx.service.folder.moveFolder(repoPath, folderPath, newFolderPath, { name: committer });
     }
 }

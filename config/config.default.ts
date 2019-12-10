@@ -27,6 +27,10 @@ export default (appInfo: EggAppInfo) => {
         saltRounds: 10, // default 10
     };
 
+    config.validate = {
+        convert: true,
+    };
+
     // the return config will combines to EggAppConfig
     return {
         ...config,

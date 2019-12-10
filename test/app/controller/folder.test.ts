@@ -74,19 +74,20 @@ describe('test/app/controller/folder.test.ts', () => {
             assert(result.body[0]);
         });
         it('should return file list with recursive', async () => {
-            await app
+            const result = await app
                 .httpRequest()
-                .post('/folders')
+                .get('/folders/files')
                 .send({
                     repoPath: repo.path,
                     recursive: true,
                 })
-                .expect(422);
+                .expect(200);
+            assert(result.body[0]);
         });
         it('should failed without repo path', async () => {
             await app
                 .httpRequest()
-                .post('/folders')
+                .get('/folders/files')
                 .expect(422);
         });
     });

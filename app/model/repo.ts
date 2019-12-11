@@ -26,7 +26,7 @@ const schema = {
 
     space: {
         // tslint:disable-next-line:no-magic-numbers
-        type: STRING(128),
+        type: STRING(48),
         allowNull: false,
     },
 
@@ -38,9 +38,8 @@ const schema = {
 
     path: {
         // repo full path: space/name
-        // Warning: will failed if space and name were both 128 bytes
         // tslint:disable-next-line:no-magic-numbers
-        type: STRING(256),
+        type: STRING(180),
         allowNull: false,
     },
 

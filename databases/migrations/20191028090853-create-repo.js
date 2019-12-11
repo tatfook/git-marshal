@@ -19,7 +19,7 @@ module.exports = {
                 },
 
                 space: {
-                    type: STRING(128),
+                    type: STRING(48),
                     allowNull: false,
                 },
 
@@ -30,7 +30,7 @@ module.exports = {
 
                 path: {
                     // repo full path: space/name
-                    type: STRING(256),
+                    type: STRING(180),
                     allowNull: false,
                 },
 

@@ -8,6 +8,7 @@ const downloadRepo = async (baseUrl: string, repoPath: string, ref?: string): Pr
             repopath: repoPath,
             ref,
         },
+        responseType: 'stream',
     });
     return result.data;
 };

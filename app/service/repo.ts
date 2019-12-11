@@ -17,7 +17,7 @@ export default class RepoService extends Service {
         return repo;
     }
 
-    public async downloadRepo(repoPath: string, ref?: string) {
+    public async downloadRepo(repoPath: string, ref: string = 'master') {
         const { ctx } = this;
         const repo = await this.getRepoByPath(repoPath);
         const guard = await ctx.service.guard.findById(repo.guardId);

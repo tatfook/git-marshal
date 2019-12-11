@@ -10,12 +10,12 @@ export default class FolderService extends Service {
         return this.ctx.service.file.upsertFile(repoPath, filePath, '', committer);
     }
 
-    public async getFiles(repoPath: string, folderPath: string, recursive: boolean = false) {
+    public async getFiles(repoPath: string, folderPath: string, recursive: boolean = false, ref: string = 'master') {
         const { ctx } = this;
         const repo = await ctx.service.repo.getRepoByPath(repoPath);
         const guard = await ctx.service.guard.findById(repo.guardId);
         folderPath = _.trim(folderPath, ' /');
-        return API.guard.getFilesUnderFolder(guard.url, repo.path, folderPath, recursive);
+        return API.guard.getFilesUnderFolder(guard.url, repo.path, folderPath, recursive, ref);
     }
 
     // Warning: will overwrite files under new folder

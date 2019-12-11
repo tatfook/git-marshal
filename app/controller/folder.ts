@@ -27,6 +27,7 @@ export default class FolderController extends Controller {
      * @param {String} repoPath path of repo
      * @param {String=} folderPath path of folder
      * @param {Boolean=} recursive enable it to get subfolder files
+     * @param {String=} ref ref of repo
      * @returns tree of folder files
      */
     public async files() {
@@ -36,11 +37,12 @@ export default class FolderController extends Controller {
                 repoPath: 'string',
                 folderPath: 'string?',
                 recursive: 'boolean?',
+                ref: 'string?',
             },
             ctx.params,
         );
-        const { repoPath, folderPath, recursive } = ctx.params;
-        ctx.body = await ctx.service.folder.getFiles(repoPath, folderPath, recursive);
+        const { repoPath, folderPath, recursive, ref } = ctx.params;
+        ctx.body = await ctx.service.folder.getFiles(repoPath, folderPath, recursive, ref);
     }
 
     /**

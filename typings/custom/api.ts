@@ -50,7 +50,7 @@ export interface IGuardAPI {
     deleteFile(baseUrl: string, repoPath: string, filePath: string, committer?: ICommitter): Promise<boolean>;
     getFileHistory(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IHistoryInfo[]>;
     commitFiles(baseUrl: string, repoPath: string, files: ICommitFile[], committer?: ICommitter): Promise<boolean>;
-    getFilesUnderFolder(baseUrl: string, repoPath: string, folderPath: string, recursive: boolean): Promise<IGitObject[]>;
+    getFilesUnderFolder(baseUrl: string, repoPath: string, folderPath: string, recursive?: boolean, ref?: string): Promise<IGitObject[]>;
 }
 
 export interface IAPI {

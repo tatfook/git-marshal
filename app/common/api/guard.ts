@@ -104,12 +104,13 @@ const commitFiles = async (baseUrl: string, repoPath: string, files: ICommitFile
     return result.data;
 };
 
-const getFilesUnderFolder = async (baseUrl: string, repoPath: string, folderPath: string, recursive: boolean = false): Promise<IGitObject[]> => {
+const getFilesUnderFolder = async (baseUrl: string, repoPath: string, folderPath: string, recursive?: boolean, ref?: string): Promise<IGitObject[]> => {
     const result = await axios.get(`${baseUrl}/file/tree`, {
         params: {
             repopath: repoPath,
             filepath: folderPath,
             recursive,
+            ref,
         },
     });
     return result.data;

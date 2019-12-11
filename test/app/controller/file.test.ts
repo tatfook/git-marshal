@@ -54,6 +54,17 @@ describe('test/app/controller/file.test.ts', () => {
                 .expect(200);
             assert(result.body);
         });
+        it('should insert a file without content', async () => {
+            const result = await app
+                .httpRequest()
+                .post('/files')
+                .send({
+                    repoPath: repo.path,
+                    filePath: 'a.md',
+                })
+                .expect(200);
+            assert(result.body);
+        });
         it('should failed while missing repoPath', async () => {
             await app
                 .httpRequest()
@@ -71,16 +82,6 @@ describe('test/app/controller/file.test.ts', () => {
                 .send({
                     repoPath: repo.path,
                     content: 'hello',
-                })
-                .expect(422);
-        });
-        it('should failed while missing content', async () => {
-            await app
-                .httpRequest()
-                .post('/files')
-                .send({
-                    repoPath: repo.path,
-                    filePath: 'a.md',
                 })
                 .expect(422);
         });

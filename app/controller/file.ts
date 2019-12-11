@@ -5,7 +5,7 @@ export default class FileController extends Controller {
      * POST /files (update or insert a file)
      * @param {string} repoPath path of repo
      * @param {string} filePath path of file
-     * @param {string} content file content
+     * @param {string=} content file content
      * @param {string=} committer name of operator
      * @returns commit id
      */
@@ -15,7 +15,7 @@ export default class FileController extends Controller {
             {
                 repoPath: 'string',
                 filePath: 'string',
-                content: 'string',
+                content: 'string?',
                 committer: 'string?',
             },
             ctx.params,

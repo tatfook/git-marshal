@@ -48,6 +48,13 @@ export default class RepoService extends Service {
         return API.guard.syncGitlabRepo(guard.url, repo.path, gitlabRepoUrl);
     }
 
+    public async getCommitInfo(repoPath: string, commitId?: string, ref: string = 'master') {
+        const { ctx } = this;
+        const repo = await this.getRepoByPath(repoPath);
+        const guard = await ctx.service.guard.findById(repo.guardId);
+        return API.guard.getCommitInfo(guard.url, repo.path, commitId, ref);
+    }
+
     private buildRepoPath(spaceName: string, repoName: string) {
         return spaceName + '/' + repoName;
     }

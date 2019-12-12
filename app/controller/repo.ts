@@ -110,4 +110,25 @@ export default class RepoController extends Controller {
         const { repoPath, gitlabRepoUrl } = ctx.params;
         ctx.body = await ctx.service.repo.syncGitlabRepo(repoPath, gitlabRepoUrl);
     }
+
+    /**
+     * GET /repos/commitInfo (get repo commit info)
+     * @param {string} repoPath path of repo
+     * @param {string=} commitId commitId of repo
+     * @param {string=} ref ref of repo
+     * @returns commit info
+     */
+    public async commitInfo() {
+        const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                commitId: 'string?',
+                ref: 'string?',
+            },
+            ctx.params,
+        );
+        const { repoPath, commitId, ref } = ctx.params;
+        ctx.body = await ctx.service.repo.getCommitInfo(repoPath, commitId, ref);
+    }
 }

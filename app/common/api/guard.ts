@@ -1,6 +1,6 @@
 import { default as axios } from 'axios';
 import * as _ from 'lodash';
-import { IGuardAPI, ICommitFile, IFileInfo, IGitObject, IHistoryInfo, ICommitter } from '../../../typings/custom/api';
+import { IGuardAPI, ICommitFile, IFileInfo, IGitObject, ICommitInfo, ICommitter } from '../../../typings/custom/api';
 
 const downloadRepo = async (baseUrl: string, repoPath: string, ref?: string): Promise<string> => {
     const result = await axios.get(`${baseUrl}/file/archive`, {
@@ -84,7 +84,7 @@ const deleteFile = async (baseUrl: string, repoPath: string, filePath: string, c
     return result.data;
 };
 
-const getFileHistory = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IHistoryInfo[]> => {
+const getFileHistory = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<ICommitInfo[]> => {
     const result = await axios.get(`${baseUrl}/file/history`, {
         params: {
             repopath: repoPath,
@@ -116,6 +116,17 @@ const getFilesUnderFolder = async (baseUrl: string, repoPath: string, folderPath
     return result.data;
 };
 
+const getCommitInfo = async (baseUrl: string, repoPath: string, commitId?: string, ref?: string): Promise<ICommitInfo> => {
+    const result = await axios.get(`${baseUrl}/repo/commitInfo`, {
+        params: {
+            repopath: repoPath,
+            commitId,
+            ref,
+        },
+    });
+    return result.data;
+};
+
 export default {
     downloadRepo,
     deleteRepo,
@@ -128,4 +139,5 @@ export default {
     getFileHistory,
     commitFiles,
     getFilesUnderFolder,
+    getCommitInfo,
 } as IGuardAPI;

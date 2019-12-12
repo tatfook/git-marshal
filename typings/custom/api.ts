@@ -32,7 +32,7 @@ export interface IGitObject {
     children?: IGitObject[];
 }
 
-export interface IHistoryInfo {
+export interface ICommitInfo {
     commitId: string;
     date: string;
     message: string;
@@ -48,9 +48,10 @@ export interface IGuardAPI {
     getFileRawData(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<string>;
     upsertFile(baseUrl: string, repoPath: string, filePath: string, content: string, committer?: ICommitter): Promise<string>;
     deleteFile(baseUrl: string, repoPath: string, filePath: string, committer?: ICommitter): Promise<boolean>;
-    getFileHistory(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IHistoryInfo[]>;
+    getFileHistory(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<ICommitInfo[]>;
     commitFiles(baseUrl: string, repoPath: string, files: ICommitFile[], committer?: ICommitter): Promise<boolean>;
     getFilesUnderFolder(baseUrl: string, repoPath: string, folderPath: string, recursive?: boolean, ref?: string): Promise<IGitObject[]>;
+    getCommitInfo(baseUrl: string, repoPath: string, commitId?: string, ref?: string): Promise<ICommitInfo>;
 }
 
 export interface IAPI {

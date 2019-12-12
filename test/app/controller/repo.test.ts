@@ -238,4 +238,58 @@ describe('test/app/controller/repo.test.ts', () => {
                 .expect(422);
         });
     });
+
+    describe('#GET /repos/commitInfo', () => {
+        let repo;
+        beforeEach(async () => {
+            repo = await app.factory.create('repo', {}, { guard });
+        });
+        it('should get repo commit info', async () => {
+            const result = await app
+                .httpRequest()
+                .get('/repos/commitInfo')
+                .send({
+                    repoPath: repo.path,
+                })
+                .expect(200);
+            assert(result.body.message);
+        });
+        it('should get repo commit info with commit id', async () => {
+            const result = await app
+                .httpRequest()
+                .get('/repos/commitInfo')
+                .send({
+                    repoPath: repo.path,
+                    commitId: 'a03c42e2b15a802638adbcb730dd15c8a3afe528',
+                })
+                .expect(200);
+            assert(result.body.message);
+        });
+        it('should get repo commit info with ref', async () => {
+            const result = await app
+                .httpRequest()
+                .get('/repos/commitInfo')
+                .send({
+                    repoPath: repo.path,
+                    ref: 'master',
+                })
+                .expect(200);
+            assert(result.body.message);
+        });
+        it('should failed if repo not exist', async () => {
+            await app
+                .httpRequest()
+                .get('/repos/commitInfo')
+                .send({
+                    repoPath: repo.path + 'abc',
+                })
+                .expect(500);
+        });
+        it('should failed without repoPath', async () => {
+            await app
+                .httpRequest()
+                .get('/repos/commitInfo')
+                .expect(422);
+        });
+    });
 });

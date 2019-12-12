@@ -19,6 +19,7 @@ export default (app: Application) => {
     router.post('/repos/rename', controller.repo.rename);
     router.get('/repos/download', controller.repo.download);
     router.post('/repos/sync', controller.repo.sync);
+    router.get('/repos/commitInfo', controller.repo.commitInfo);
 
     router.post('/folders', controller.folder.create);
     router.delete('/folders', controller.folder.destroy);

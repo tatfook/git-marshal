@@ -62,11 +62,18 @@ const getFileRawData = async (baseUrl: string, repoPath: string, filePath: strin
     return result.data;
 };
 
-const upsertFile = async (baseUrl: string, repoPath: string, filePath: string, content: string, committer?: ICommitter): Promise<string> => {
+const upsertFile = async (
+    baseUrl: string,
+    repoPath: string,
+    filePath: string,
+    content: string,
+    encoding: string = 'utf8',
+    committer?: ICommitter,
+): Promise<string> => {
     const result = await axios.post(`${baseUrl}/file`, {
         repopath: repoPath,
         filepath: filePath,
-        encoding: 'utf8',
+        encoding,
         content,
         committer,
     });

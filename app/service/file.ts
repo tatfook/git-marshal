@@ -4,12 +4,12 @@ import API from '../common/api';
 import { ICommitFile, ECommitAction, ICommitter } from '../../typings/custom/api';
 
 export default class FileService extends Service {
-    public async upsertFile(repoPath: string, filePath: string, content: string, committer?: ICommitter) {
+    public async upsertFile(repoPath: string, filePath: string, content: string, encoding?: string, committer?: ICommitter) {
         const { ctx } = this;
         const repo = await ctx.service.repo.getRepoByPath(repoPath);
         const guard = await ctx.service.guard.findById(repo.guardId);
         filePath = _.trim(filePath, ' /');
-        return API.guard.upsertFile(guard.url, repo.path, filePath, content, committer);
+        return API.guard.upsertFile(guard.url, repo.path, filePath, content, encoding, committer);
     }
 
     public async deleteFile(repoPath: string, filePath: string, committer?: ICommitter) {

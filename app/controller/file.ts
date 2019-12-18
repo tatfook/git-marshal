@@ -7,6 +7,7 @@ export default class FileController extends Controller {
      * @param {string} filePath path of file
      * @param {string=} content file content
      * @param {string=} committer name of operator
+     * @param {string=} encoding name of operator
      * @returns commit id
      */
     public async upsert() {
@@ -17,11 +18,12 @@ export default class FileController extends Controller {
                 filePath: 'string',
                 content: 'string?',
                 committer: 'string?',
+                encoding: 'string?',
             },
             ctx.params,
         );
-        const { repoPath, filePath, content, committer } = ctx.params;
-        ctx.body = await ctx.service.file.upsertFile(repoPath, filePath, content, { name: committer });
+        const { repoPath, filePath, content, encoding, committer } = ctx.params;
+        ctx.body = await ctx.service.file.upsertFile(repoPath, filePath, content, encoding, { name: committer });
     }
 
     /**

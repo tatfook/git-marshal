@@ -46,7 +46,7 @@ export interface IGuardAPI {
     syncGitlabRepo(baseUrl: string, repoPath: string, gitlabRepoUrl: string, forceSync?: boolean);
     getFileInfo(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IFileInfo>;
     getFileRawData(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<string>;
-    upsertFile(baseUrl: string, repoPath: string, filePath: string, content: string, committer?: ICommitter): Promise<string>;
+    upsertFile(baseUrl: string, repoPath: string, filePath: string, content: string, encoding?: string, committer?: ICommitter): Promise<string>;
     deleteFile(baseUrl: string, repoPath: string, filePath: string, committer?: ICommitter): Promise<boolean>;
     getFileHistory(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<ICommitInfo[]>;
     commitFiles(baseUrl: string, repoPath: string, files: ICommitFile[], committer?: ICommitter): Promise<boolean>;

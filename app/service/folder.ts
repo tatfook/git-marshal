@@ -7,7 +7,7 @@ import { ICommitFile, ECommitAction, IGitObject, ICommitter } from '../../typing
 export default class FolderService extends Service {
     public async createFolder(repoPath: string, folderPath: string, committer?: ICommitter) {
         const filePath = _.trim(folderPath, ' /') + '/' + KEEP;
-        return this.ctx.service.file.upsertFile(repoPath, filePath, '', committer);
+        return this.ctx.service.file.upsertFile(repoPath, filePath, '', 'utf8', committer);
     }
 
     public async getFiles(repoPath: string, folderPath: string, recursive: boolean = false, commitId?: string, ref: string = 'master') {

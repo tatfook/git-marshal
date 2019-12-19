@@ -31,6 +31,11 @@ export default (appInfo: EggAppInfo) => {
         convert: true,
     };
 
+    config.bodyParser = {
+        jsonLimit: '10mb',
+        formLimit: '10mb',
+    };
+
     // the return config will combines to EggAppConfig
     return {
         ...config,

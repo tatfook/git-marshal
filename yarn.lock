@@ -3193,11 +3193,6 @@ factory-girl@^5.0.2:
     babel-runtime "^6.11.6"
     chance "^1.0.4"
 
-faker@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/faker/-/faker-4.1.0.tgz#1e45bbbecc6774b3c195fad2835109c6d748cc3f"
-  integrity sha1-HkW7vsxndLPBlfrSg1EJxtdIzD8=
-
 fast-glob@^2.0.2, fast-glob@^2.2.6:
   version "2.2.7"
   resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-2.2.7.tgz#6953857c3afa475fff92ee6015d52da70a4cd39d"
@@ -4628,6 +4623,11 @@ mime@^1.3.4, mime@^1.4.1:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/mime/-/mime-1.6.0.tgz#32cd9e5c64553bd58d19a568af452acff04981b1"
   integrity sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==
+
+mime@^2.4.4:
+  version "2.4.4"
+  resolved "https://registry.npm.taobao.org/mime/download/mime-2.4.4.tgz?cache=0&sync_timestamp=1560034758817&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fmime%2Fdownload%2Fmime-2.4.4.tgz#bd7b91135fc6b01cde3e9bae33d659b63d8857e5"
+  integrity sha1-vXuRE1/GsBzePpuuM9ZZtj2IV+U=
 
 mimic-fn@^2.0.0:
   version "2.1.0"

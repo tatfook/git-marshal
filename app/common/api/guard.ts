@@ -1,5 +1,6 @@
 import { default as axios } from 'axios';
 import * as _ from 'lodash';
+import * as mime from 'mime';
 import { IGuardAPI, ICommitFile, IFileInfo, IGitObject, ICommitInfo, ICommitter } from '../../../typings/custom/api';
 
 const downloadRepo = async (baseUrl: string, repoPath: string, ref?: string): Promise<string> => {
@@ -52,12 +53,18 @@ const getFileInfo = async (baseUrl: string, repoPath: string, filePath: string, 
 };
 
 const getFileRawData = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<string> => {
+    const mimeType = mime.getType(filePath);
+    let responseType: any = 'json';
+    if (mimeType && mimeType.indexOf('text/') !== 0) {
+        responseType = 'stream';
+    }
     const result = await axios.get(`${baseUrl}/file/raw`, {
         params: {
             repopath: repoPath,
             filepath: filePath,
             commitId,
         },
+        responseType,
     });
     return result.data;
 };

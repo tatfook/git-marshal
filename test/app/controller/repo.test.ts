@@ -16,7 +16,7 @@ describe('test/app/controller/repo.test.ts', () => {
                     name: 'demo',
                 })
                 .expect(200);
-            assert(result.body.space === 'space');
+            assert(result.body.space !== 'space');
         });
         it('should failed if repo already exist', async () => {
             const repo = await app.factory.create('repo', {}, { guard });

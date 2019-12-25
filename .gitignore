@@ -16,3 +16,5 @@ app/**/*.map
 test/**/*.map
 config/**/*.map
 databases/config.json
+
+report.xml

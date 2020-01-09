@@ -55,7 +55,7 @@ const getFileInfo = async (baseUrl: string, repoPath: string, filePath: string, 
 const getFileRawData = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<string> => {
     const mimeType = mime.getType(filePath);
     let responseType: any = 'json';
-    if (mimeType && mimeType.indexOf('text/') !== 0) {
+    if (mimeType && !mimeType.match('text') && !mimeType.match('xml')) {
         responseType = 'stream';
     }
     const result = await axios.get(`${baseUrl}/file/raw`, {

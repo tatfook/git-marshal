@@ -1,5 +1,4 @@
 import { Controller } from 'egg';
-import * as mime from 'mime';
 import * as _path from 'path';
 
 export default class FileController extends Controller {
@@ -68,18 +67,6 @@ export default class FileController extends Controller {
         );
         const { repoPath, filePath, commitId } = ctx.params;
         ctx.body = await ctx.service.file.getFileRawData(repoPath, filePath, commitId);
-        const filename = _path.basename(filePath);
-        const mimeType = mime.getType(filename);
-        if (mimeType) {
-            ctx.set('Content-Type', mimeType);
-            if (mimeType.indexOf('text/') !== 0) {
-                if (mimeType.indexOf('image/') === 0) {
-                    ctx.set('Content-Disposition', `inline; filename=${filename}`);
-                } else {
-                    ctx.set('Content-Disposition', `attachment; filename=${filename}`);
-                }
-            }
-        }
     }
 
     /**

@@ -1,6 +1,5 @@
 import { default as axios } from 'axios';
 import * as _ from 'lodash';
-import * as mime from 'mime';
 import { IGuardAPI, ICommitFile, IFileInfo, IGitObject, ICommitInfo, ICommitter } from '../../../typings/custom/api';
 
 const downloadRepo = async (baseUrl: string, repoPath: string, ref?: string): Promise<string> => {
@@ -41,7 +40,7 @@ const syncGitlabRepo = async (baseUrl: string, repoPath: string, gitlabRepoUrl: 
 };
 
 const getFileInfo = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<IFileInfo> => {
-    const result = await axios.get(`${baseUrl}/file`, {
+    const result = await axios.get(`${baseUrl}/file/info`, {
         params: {
             repopath: repoPath,
             filepath: filePath,
@@ -52,19 +51,25 @@ const getFileInfo = async (baseUrl: string, repoPath: string, filePath: string, 
     return data;
 };
 
+const getFileData = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<string> => {
+    const result = await axios.get(`${baseUrl}/file`, {
+        params: {
+            repopath: repoPath,
+            filepath: filePath,
+            commitId,
+        },
+    });
+    return result.data;
+};
+
 const getFileRawData = async (baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<string> => {
-    const mimeType = mime.getType(filePath);
-    let responseType: any = 'json';
-    if (mimeType && !mimeType.match('text') && !mimeType.match('xml')) {
-        responseType = 'stream';
-    }
     const result = await axios.get(`${baseUrl}/file/raw`, {
         params: {
             repopath: repoPath,
             filepath: filePath,
             commitId,
         },
-        responseType,
+        responseType: 'stream',
     });
     return result.data;
 };
@@ -155,6 +160,7 @@ export default {
     renameRepo,
     syncGitlabRepo,
     getFileInfo,
+    getFileData,
     getFileRawData,
     upsertFile,
     deleteFile,

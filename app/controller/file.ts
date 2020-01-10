@@ -1,4 +1,5 @@
 import { Controller } from 'egg';
+import * as mime from 'mime';
 import * as _path from 'path';
 
 export default class FileController extends Controller {
@@ -67,16 +68,51 @@ export default class FileController extends Controller {
         );
         const { repoPath, filePath, commitId } = ctx.params;
         ctx.body = await ctx.service.file.getFileRawData(repoPath, filePath, commitId);
+        const filename = _path.basename(filePath);
+        const mimeType = mime.getType(filename);
+        if (mimeType) {
+            ctx.set('Content-Type', mimeType);
+            this.ctx.set('Content-Description', 'File Transfer');
+            this.ctx.set('Content-Transfer-Encoding', 'binary');
+            if (mimeType.match('image') || mimeType.match('text')) {
+                ctx.set('Content-Disposition', `inline; filename=${filename}`);
+            } else {
+                ctx.set('Content-Disposition', `attachment; filename=${filename}`);
+            }
+        } else {
+            ctx.error('Invalid File Type');
+        }
     }
 
     /**
-     * GET /files (get file info)
+     * GET /files (get file data)
+     * @param {String} repoPath path of repo
+     * @param {String} filePath path of file
+     * @param {String=} commitId get info of a specific commitId
+     * @returns file data
+     */
+    public async show() {
+        const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                filePath: 'string',
+                commitId: 'string?',
+            },
+            ctx.params,
+        );
+        const { repoPath, filePath, commitId } = ctx.params;
+        ctx.body = await ctx.service.file.getFileData(repoPath, filePath, commitId);
+    }
+
+    /**
+     * GET /files/info (get file info)
      * @param {String} repoPath path of repo
      * @param {String} filePath path of file
      * @param {String=} commitId get info of a specific commitId
      * @returns file info
      */
-    public async show() {
+    public async info() {
         const { ctx } = this;
         ctx.validate(
             {

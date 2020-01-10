@@ -59,6 +59,14 @@ export default class FileService extends Service {
         return API.guard.getFileInfo(guard.url, repo.path, filePath, commitId);
     }
 
+    public async getFileData(repoPath: string, filePath: string, commitId?: string) {
+        const { ctx } = this;
+        const repo = await ctx.service.repo.getRepoByPath(repoPath);
+        const guard = await ctx.service.guard.findById(repo.guardId);
+        filePath = _.trim(filePath, ' /');
+        return API.guard.getFileData(guard.url, repo.path, filePath, commitId);
+    }
+
     public async getFileRawData(repoPath: string, filePath: string, commitId?: string) {
         const { ctx } = this;
         const repo = await ctx.service.repo.getRepoByPath(repoPath);

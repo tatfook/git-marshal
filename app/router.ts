@@ -26,10 +26,11 @@ export default (app: Application) => {
     router.get('/folders/files', controller.folder.files);
     router.post('/folders/move', controller.folder.move);
 
-    router.get('/files', controller.file.show);
     router.post('/files', controller.file.upsert);
     router.delete('/files', controller.file.destroy);
     router.get('/files/history', controller.file.history);
+    router.get('/files', controller.file.show);
+    router.get('/files/info', controller.file.info);
     router.get('/files/raw', controller.file.raw);
     router.post('/files/move', controller.file.move);
 };

@@ -131,6 +131,50 @@ describe('test/app/controller/file.test.ts', () => {
         });
     });
 
+    describe('#GET /files', () => {
+        it('should return file data', async () => {
+            const result = await app
+                .httpRequest()
+                .get('/files')
+                .send({
+                    repoPath: repo.path,
+                    filePath: 'a.md',
+                })
+                .expect(200);
+            assert(result.body);
+        });
+        it('should return file data with commitId', async () => {
+            const result = await app
+                .httpRequest()
+                .get('/files')
+                .send({
+                    repoPath: repo.path,
+                    filePath: 'a.md',
+                    commitId: 'fsdf21435fgeerg',
+                })
+                .expect(200);
+            assert(result.body);
+        });
+        it('should failed while missing repoPath', async () => {
+            await app
+                .httpRequest()
+                .get('/files')
+                .send({
+                    filePath: 'a.md',
+                })
+                .expect(422);
+        });
+        it('should failed while missing filePath', async () => {
+            await app
+                .httpRequest()
+                .get('/files')
+                .send({
+                    repoPath: repo.path,
+                })
+                .expect(422);
+        });
+    });
+
     describe('#GET /files/raw', () => {
         it('should return file raw data', async () => {
             const result = await app
@@ -175,11 +219,11 @@ describe('test/app/controller/file.test.ts', () => {
         });
     });
 
-    describe('#GET /files', () => {
+    describe('#GET /files/info', () => {
         it('should return file info data', async () => {
             const result = await app
                 .httpRequest()
-                .get('/files')
+                .get('/files/info')
                 .send({
                     repoPath: repo.path,
                     filePath: 'a.md',
@@ -190,7 +234,7 @@ describe('test/app/controller/file.test.ts', () => {
         it('should return file info data with commitId', async () => {
             const result = await app
                 .httpRequest()
-                .get('/files')
+                .get('/files/info')
                 .send({
                     repoPath: repo.path,
                     filePath: 'a.md',
@@ -202,7 +246,7 @@ describe('test/app/controller/file.test.ts', () => {
         it('should failed while missing repoPath', async () => {
             await app
                 .httpRequest()
-                .get('/files')
+                .get('/files/info')
                 .send({
                     filePath: 'a.md',
                 })
@@ -211,7 +255,7 @@ describe('test/app/controller/file.test.ts', () => {
         it('should failed while missing filePath', async () => {
             await app
                 .httpRequest()
-                .get('/files')
+                .get('/files/info')
                 .send({
                     repoPath: repo.path,
                 })

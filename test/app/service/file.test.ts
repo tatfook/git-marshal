@@ -90,15 +90,30 @@ describe('test/app/service/file.test.ts', () => {
             }
         });
     });
+    describe('#getFileData', () => {
+        it('should return string data of a valid file', async () => {
+            const data = await ctx.service.file.getFileData(repo.path, 'hey.txt');
+            assert(data);
+        });
+
+        it('should not return string data if file path belongs to no repo', async () => {
+            try {
+                await ctx.service.file.getFileData(repo.path + 'fake', 'test.txt');
+                assert.fail('should fail to delete file');
+            } catch (e) {
+                assert(e.message === 'repo not found');
+            }
+        });
+    });
     describe('#getFileRawData', () => {
         it('should return raw data of a valid file', async () => {
-            const data = await ctx.service.file.getFileRawData(repo.path, 'hey.txt');
+            const data = await ctx.service.file.getFileRawData(repo.path, 'hey.zip');
             assert(data);
         });
 
         it('should not return raw data if file path belongs to no repo', async () => {
             try {
-                await ctx.service.file.getFileRawData(repo.path + 'fake', 'test.txt');
+                await ctx.service.file.getFileRawData(repo.path + 'fake', 'test.zip');
                 assert.fail('should fail to delete file');
             } catch (e) {
                 assert(e.message === 'repo not found');

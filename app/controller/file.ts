@@ -70,17 +70,15 @@ export default class FileController extends Controller {
         ctx.body = await ctx.service.file.getFileRawData(repoPath, filePath, commitId);
         const filename = _path.basename(filePath);
         const mimeType = mime.getType(filename);
+        ctx.set('Content-Disposition', `attachment; filename=${filename}`);
+        ctx.set('Content-Description', 'File Transfer');
+        ctx.set('Content-Transfer-Encoding', 'binary');
+        ctx.set('Content-Type', 'application/octet-stream');
         if (mimeType) {
             ctx.set('Content-Type', mimeType);
-            this.ctx.set('Content-Description', 'File Transfer');
-            this.ctx.set('Content-Transfer-Encoding', 'binary');
             if (mimeType.match('image') || mimeType.match('text')) {
                 ctx.set('Content-Disposition', `inline; filename=${filename}`);
-            } else {
-                ctx.set('Content-Disposition', `attachment; filename=${filename}`);
             }
-        } else {
-            ctx.error('Invalid File Type');
         }
     }
 

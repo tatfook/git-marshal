@@ -12,6 +12,14 @@ export default class FileService extends Service {
         return API.guard.upsertFile(guard.url, repo.path, filePath, content, encoding, committer);
     }
 
+    public async upsertBinaryFile(streamData: any, repoPath: string, filePath: string, encoding?: string, committer?: ICommitter) {
+        const { ctx } = this;
+        const repo = await ctx.service.repo.getRepoByPath(repoPath);
+        const guard = await ctx.service.guard.findById(repo.guardId);
+        filePath = _.trim(filePath, ' /');
+        return API.guard.upsertBinaryFile(streamData, guard.url, repo.path, filePath, encoding, committer);
+    }
+
     public async deleteFile(repoPath: string, filePath: string, committer?: ICommitter) {
         const { ctx } = this;
         const repo = await ctx.service.repo.getRepoByPath(repoPath);

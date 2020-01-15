@@ -27,6 +27,7 @@ export default (app: Application) => {
     router.post('/folders/move', controller.folder.move);
 
     router.post('/files', controller.file.upsert);
+    router.post('/files/binary', controller.file.upsertBinary);
     router.delete('/files', controller.file.destroy);
     router.get('/files/history', controller.file.history);
     router.get('/files', controller.file.show);

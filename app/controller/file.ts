@@ -28,6 +28,22 @@ export default class FileController extends Controller {
         ctx.body = await ctx.service.file.upsertFile(repoPath, filePath, content, encoding, { name: committer });
     }
 
+    public async upsertBinary() {
+        const { ctx } = this;
+        ctx.validate(
+            {
+                repoPath: 'string',
+                filePath: 'string',
+                committer: 'string?',
+                encoding: 'string?',
+            },
+            ctx.params,
+        );
+        const { repoPath, filePath, encoding, committer } = ctx.params;
+        const streamData = ctx.req;
+        ctx.body = await ctx.service.file.upsertBinaryFile(streamData, repoPath, filePath, encoding, { name: committer });
+    }
+
     /**
      * GET /files/history (get history of a file)
      * @param {String} repoPath path of repo

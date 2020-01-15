@@ -92,6 +92,28 @@ const upsertFile = async (
     return result.data;
 };
 
+const upsertBinaryFile = async (
+    streamData: any,
+    baseUrl: string,
+    repoPath: string,
+    filePath: string,
+    encoding: string = 'utf8',
+    committer?: ICommitter,
+): Promise<string> => {
+    const result = await axios.post(`${baseUrl}/file/binary`, streamData, {
+        params: {
+            repopath: repoPath,
+            filepath: filePath,
+            encoding,
+            committer,
+        },
+        headers: {
+            'Content-Type': ['application/octet-stream'],
+        },
+    });
+    return result.data;
+};
+
 const deleteFile = async (baseUrl: string, repoPath: string, filePath: string, committer?: ICommitter): Promise<boolean> => {
     const result = await axios.delete(`${baseUrl}/file`, {
         data: {
@@ -163,6 +185,7 @@ export default {
     getFileData,
     getFileRawData,
     upsertFile,
+    upsertBinaryFile,
     deleteFile,
     getFileHistory,
     commitFiles,

@@ -48,6 +48,7 @@ export interface IGuardAPI {
     getFileData(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<string>;
     getFileRawData(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<string>;
     upsertFile(baseUrl: string, repoPath: string, filePath: string, content: string, encoding?: string, committer?: ICommitter): Promise<string>;
+    upsertBinaryFile(binaryStream: any, baseUrl: string, repoPath: string, filePath: string, encoding?: string, committer?: ICommitter): Promise<string>;
     deleteFile(baseUrl: string, repoPath: string, filePath: string, committer?: ICommitter): Promise<boolean>;
     getFileHistory(baseUrl: string, repoPath: string, filePath: string, commitId?: string): Promise<ICommitInfo[]>;
     commitFiles(baseUrl: string, repoPath: string, files: ICommitFile[], committer?: ICommitter): Promise<boolean>;

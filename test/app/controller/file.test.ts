@@ -1,4 +1,5 @@
 import * as assert from 'assert';
+import * as fs from 'fs';
 import { app } from 'egg-mock/bootstrap';
 import { IRepo } from '../../../typings/custom/model';
 
@@ -82,6 +83,79 @@ describe('test/app/controller/file.test.ts', () => {
                 .send({
                     repoPath: repo.path,
                     content: 'hello',
+                })
+                .expect(422);
+        });
+    });
+
+    describe('#POST /files/binary', () => {
+        let streamData;
+        beforeEach(async () => {
+            streamData = fs.readFileSync('test/tmp/hello.zip');
+        });
+        it('should insert a file if not exist', async () => {
+            const result = await app
+                .httpRequest()
+                .post('/files/binary')
+                .send(streamData)
+                .query({
+                    repoPath: repo.path,
+                    filePath: 'a.md',
+                })
+                .expect(200);
+            assert(result.body);
+        });
+        it('should update a file if already exist', async () => {
+            await app
+                .httpRequest()
+                .post('/files/binary')
+                .send(streamData)
+                .query({
+                    repoPath: repo.path,
+                    filePath: 'a.md',
+                })
+                .expect(200);
+            const result = await app
+                .httpRequest()
+                .post('/files/binary')
+                .send(streamData)
+                .query({
+                    repoPath: repo.path,
+                    filePath: 'a.md',
+                })
+                .expect(200);
+            assert(result.body);
+        });
+        it('should insert a file with committer', async () => {
+            const result = await app
+                .httpRequest()
+                .post('/files/binary')
+                .send(streamData)
+                .query({
+                    repoPath: repo.path,
+                    filePath: 'a.md',
+                    committer: 'admin',
+                })
+                .expect(200);
+            assert(result.body);
+        });
+        it('should failed while missing repoPath', async () => {
+            await app
+                .httpRequest()
+                .post('/files/binary')
+                .send(streamData)
+                .query({
+                    filePath: 'a.md',
+                })
+                .expect(422);
+        });
+        it('should failed while missing filePath', async () => {
+            await app
+                .httpRequest()
+                .post('/files/binary')
+                .send(streamData)
+                .query({
+                    repoPath: repo.path,
                 })
                 .expect(422);
         });

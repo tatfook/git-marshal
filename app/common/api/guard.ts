@@ -82,13 +82,20 @@ const upsertFile = async (
     encoding: string = 'utf8',
     committer?: ICommitter,
 ): Promise<string> => {
-    const result = await axios.post(`${baseUrl}/file`, {
-        repopath: repoPath,
-        filepath: filePath,
-        encoding,
-        content,
-        committer,
-    });
+    const result = await axios.post(
+        `${baseUrl}/file`,
+        {
+            repopath: repoPath,
+            filepath: filePath,
+            encoding,
+            content,
+            committer,
+        },
+        {
+            // tslint:disable-next-line:no-magic-numbers
+            maxContentLength: 100 * 1024 * 1024,
+        },
+    );
     return result.data;
 };
 
@@ -110,6 +117,8 @@ const upsertBinaryFile = async (
         headers: {
             'Content-Type': ['application/octet-stream'],
         },
+        // tslint:disable-next-line:no-magic-numbers
+        maxContentLength: 100 * 1024 * 1024,
     });
     return result.data;
 };

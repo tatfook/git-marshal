@@ -3,12 +3,8 @@ import { Service } from 'egg';
 export default class GuardService extends Service {
     public async findById(id: number) {
         const { ctx } = this;
-        let guard: any = await ctx.model.Guard.getCachedGuard(id);
-        if (!guard) {
-            guard = await ctx.model.Guard.findOne({ where: { id } });
-            if (!guard) return this.ctx.throw('invalid id');
-            ctx.model.Guard.cacheGuard(guard);
-        }
+        const guard = await ctx.model.Guard.findOne({ where: { id } });
+        if (!guard) return this.ctx.throw('invalid id');
         return guard;
     }
 

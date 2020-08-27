@@ -12,20 +12,4 @@ describe('test/app/model/repo.test.ts', () => {
         await guard.reload();
         assert(guard.repoCount === 0);
     });
-
-    describe('#cache', () => {
-        let repo: any;
-        beforeEach(async () => {
-            repo = await app.factory.create('repo');
-        });
-        it('return data if cached', async () => {
-            await app.model.Repo.cacheRepoByPath(repo);
-            const cachedRepo = await app.model.Repo.getCachedRepoByPath(repo.path);
-            assert(cachedRepo && cachedRepo.id === repo.id);
-        });
-        it('return null if not cached', async () => {
-            const cachedRepo = await app.model.Repo.getCachedRepoByPath(repo.path);
-            assert(cachedRepo === null);
-        });
-    });
 });

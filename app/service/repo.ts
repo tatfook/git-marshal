@@ -13,7 +13,6 @@ export default class RepoService extends Service {
             path: this.buildRepoPath(spaceName, repoName),
         });
         if (!repo) ctx.throw('Failed to create repo');
-        ctx.model.Repo.cacheRepoByPath(repo);
         return repo;
     }
 
@@ -63,12 +62,8 @@ export default class RepoService extends Service {
         const { ctx } = this;
         repoPath = _.trim(repoPath, ' /');
         if (repoPath === '') ctx.throw('repo not found');
-        let repo = await ctx.model.Repo.getCachedRepoByPath(repoPath);
-        if (!repo) {
-            repo = await ctx.model.Repo.findOne({ where: { path: repoPath } });
-            if (!repo) return ctx.throw('repo not found');
-            ctx.model.Repo.cacheRepoByPath(repo);
-        }
+        const repo = await ctx.model.Repo.findOne({ where: { path: repoPath } });
+        if (!repo) return ctx.throw('repo not found');
         return repo;
     }
 }

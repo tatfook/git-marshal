@@ -37,7 +37,7 @@
         "egg-tracer": "^1.1.0",
         "egg-validate": "^2.0.2",
         "js-base64": "^2.5.1",
-        "lodash": "^4.17.11",
+        "lodash": "^4.17.21",
         "mime": "^2.4.4",
         "mysql2": "^1.6.5",
         "pluralize": "^7.0.0",
